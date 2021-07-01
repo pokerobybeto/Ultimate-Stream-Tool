@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Link (1)",
+        "Link (2)",
+        "Link (3)",
+        "Link (4)",
+        "Link (5)",
+        "Link (6)",
+        "Link (7)",
+        "Link (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Duck Hunt (1)",
+        "Duck Hunt (2)",
+        "Duck Hunt (3)",
+        "Duck Hunt (4)",
+        "Duck Hunt (5)",
+        "Duck Hunt (6)",
+        "Duck Hunt (7)",
+        "Duck Hunt (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

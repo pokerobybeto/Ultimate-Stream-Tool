@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Donkey Kong (1)",
+        "Donkey Kong (2)",
+        "Donkey Kong (3)",
+        "Donkey Kong (4)",
+        "Donkey Kong (5)",
+        "Donkey Kong (6)",
+        "Donkey Kong (7)",
+        "Donkey Kong (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

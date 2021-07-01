@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Byleth (1)",
+        "Byleth (2)",
+        "Byleth (3)",
+        "Byleth (4)",
+        "Byleth (5)",
+        "Byleth (6)",
+        "Byleth (7)",
+        "Byleth (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

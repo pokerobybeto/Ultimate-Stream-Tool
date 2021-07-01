@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Zero Suit Samus (1)",
+        "Zero Suit Samus (2)",
+        "Zero Suit Samus (3)",
+        "Zero Suit Samus (4)",
+        "Zero Suit Samus (5)",
+        "Zero Suit Samus (6)",
+        "Zero Suit Samus (7)",
+        "Zero Suit Samus (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

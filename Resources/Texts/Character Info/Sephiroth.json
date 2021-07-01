@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Sephiroth (1)",
+        "Sephiroth (2)",
+        "Sephiroth (3)",
+        "Sephiroth (4)",
+        "Sephiroth (5)",
+        "Sephiroth (6)",
+        "Sephiroth (7)",
+        "Sephiroth (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

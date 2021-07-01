@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Peach (1)",
+        "Peach (2)",
+        "Peach (3)",
+        "Peach (4)",
+        "Peach (5)",
+        "Peach (6)",
+        "Peach (7)",
+        "Peach (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Greninja (1)",
+        "Greninja (2)",
+        "Greninja (3)",
+        "Greninja (4)",
+        "Greninja (5)",
+        "Greninja (6)",
+        "Greninja (7)",
+        "Greninja (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

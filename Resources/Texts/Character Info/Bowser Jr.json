@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Bowser Jr (1)",
+        "Bowser Jr (2)",
+        "Bowser Jr (3)",
+        "Bowser Jr (4)",
+        "Bowser Jr (5)",
+        "Bowser Jr (6)",
+        "Bowser Jr (7)",
+        "Bowser Jr (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

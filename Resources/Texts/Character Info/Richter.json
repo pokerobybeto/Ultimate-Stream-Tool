@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Richter (1)",
+        "Richter (2)",
+        "Richter (3)",
+        "Richter (4)",
+        "Richter (5)",
+        "Richter (6)",
+        "Richter (7)",
+        "Richter (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

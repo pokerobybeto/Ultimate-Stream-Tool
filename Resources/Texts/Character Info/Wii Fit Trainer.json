@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Wii Fit Trainer (1)",
+        "Wii Fit Trainer (2)",
+        "Wii Fit Trainer (3)",
+        "Wii Fit Trainer (4)",
+        "Wii Fit Trainer (5)",
+        "Wii Fit Trainer (6)",
+        "Wii Fit Trainer (7)",
+        "Wii Fit Trainer (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

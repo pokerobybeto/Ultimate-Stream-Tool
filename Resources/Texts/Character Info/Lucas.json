@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Lucas (1)",
+        "Lucas (2)",
+        "Lucas (3)",
+        "Lucas (4)",
+        "Lucas (5)",
+        "Lucas (6)",
+        "Lucas (7)",
+        "Lucas (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

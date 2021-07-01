@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Lucina (1)",
+        "Lucina (2)",
+        "Lucina (3)",
+        "Lucina (4)",
+        "Lucina (5)",
+        "Lucina (6)",
+        "Lucina (7)",
+        "Lucina (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

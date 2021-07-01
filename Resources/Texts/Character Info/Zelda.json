@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Zelda (1)",
+        "Zelda (2)",
+        "Zelda (3)",
+        "Zelda (4)",
+        "Zelda (5)",
+        "Zelda (6)",
+        "Zelda (7)",
+        "Zelda (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

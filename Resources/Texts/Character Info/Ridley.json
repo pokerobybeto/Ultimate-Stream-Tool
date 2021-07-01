@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Ridley (1)",
+        "Ridley (2)",
+        "Ridley (3)",
+        "Ridley (4)",
+        "Ridley (5)",
+        "Ridley (6)",
+        "Ridley (7)",
+        "Ridley (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

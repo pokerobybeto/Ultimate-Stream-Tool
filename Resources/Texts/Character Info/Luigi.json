@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Luigi (1)",
+        "Luigi (2)",
+        "Luigi (3)",
+        "Luigi (4)",
+        "Luigi (5)",
+        "Luigi (6)",
+        "Luigi (7)",
+        "Luigi (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

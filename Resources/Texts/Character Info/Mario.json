@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Mario (1)",
+        "Mario (2)",
+        "Mario (3)",
+        "Mario (4)",
+        "Mario (5)",
+        "Mario (6)",
+        "Mario (7)",
+        "Mario (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

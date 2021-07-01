@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Daisy (1)",
+        "Daisy (2)",
+        "Daisy (3)",
+        "Daisy (4)",
+        "Daisy (5)",
+        "Daisy (6)",
+        "Daisy (7)",
+        "Daisy (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Sonic (1)",
+        "Sonic (2)",
+        "Sonic (3)",
+        "Sonic (4)",
+        "Sonic (5)",
+        "Sonic (6)",
+        "Sonic (7)",
+        "Sonic (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

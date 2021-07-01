@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Cloud (1)",
+        "Cloud (2)",
+        "Cloud (3)",
+        "Cloud (4)",
+        "Cloud (5)",
+        "Cloud (6)",
+        "Cloud (7)",
+        "Cloud (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

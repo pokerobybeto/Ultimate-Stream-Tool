@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Hero (1)",
+        "Hero (2)",
+        "Hero (3)",
+        "Hero (4)",
+        "Hero (5)",
+        "Hero (6)",
+        "Hero (7)",
+        "Hero (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

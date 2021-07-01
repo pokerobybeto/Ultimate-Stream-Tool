@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Dark Pit (1)",
+        "Dark Pit (2)",
+        "Dark Pit (3)",
+        "Dark Pit (4)",
+        "Dark Pit (5)",
+        "Dark Pit (6)",
+        "Dark Pit (7)",
+        "Dark Pit (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

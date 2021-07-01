@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "King Dedede (1)",
+        "King Dedede (2)",
+        "King Dedede (3)",
+        "King Dedede (4)",
+        "King Dedede (5)",
+        "King Dedede (6)",
+        "King Dedede (7)",
+        "King Dedede (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

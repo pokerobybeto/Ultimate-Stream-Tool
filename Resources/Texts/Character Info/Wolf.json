@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Wolf (1)",
+        "Wolf (2)",
+        "Wolf (3)",
+        "Wolf (4)",
+        "Wolf (5)",
+        "Wolf (6)",
+        "Wolf (7)",
+        "Wolf (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

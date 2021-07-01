@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Rosalina & Luma (1)",
+        "Rosalina & Luma (2)",
+        "Rosalina & Luma (3)",
+        "Rosalina & Luma (4)",
+        "Rosalina & Luma (5)",
+        "Rosalina & Luma (6)",
+        "Rosalina & Luma (7)",
+        "Rosalina & Luma (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

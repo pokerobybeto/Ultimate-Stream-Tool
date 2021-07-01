@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Dr Mario (1)",
+        "Dr Mario (2)",
+        "Dr Mario (3)",
+        "Dr Mario (4)",
+        "Dr Mario (5)",
+        "Dr Mario (6)",
+        "Dr Mario (7)",
+        "Dr Mario (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

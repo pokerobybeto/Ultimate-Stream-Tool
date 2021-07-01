@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Pyra & Mythra (1)",
+        "Pyra & Mythra (2)",
+        "Pyra & Mythra (3)",
+        "Pyra & Mythra (4)",
+        "Pyra & Mythra (5)",
+        "Pyra & Mythra (6)",
+        "Pyra & Mythra (7)",
+        "Pyra & Mythra (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

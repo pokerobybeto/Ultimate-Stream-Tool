@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Olimar (1)",
+        "Olimar (2)",
+        "Olimar (3)",
+        "Olimar (4)",
+        "Olimar (5)",
+        "Olimar (6)",
+        "Olimar (7)",
+        "Olimar (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

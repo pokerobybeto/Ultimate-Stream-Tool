@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Falco (1)",
+        "Falco (2)",
+        "Falco (3)",
+        "Falco (4)",
+        "Falco (5)",
+        "Falco (6)",
+        "Falco (7)",
+        "Falco (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

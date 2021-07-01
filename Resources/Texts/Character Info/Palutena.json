@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Palutena (1)",
+        "Palutena (2)",
+        "Palutena (3)",
+        "Palutena (4)",
+        "Palutena (5)",
+        "Palutena (6)",
+        "Palutena (7)",
+        "Palutena (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Pac Man (1)",
+        "Pac Man (2)",
+        "Pac Man (3)",
+        "Pac Man (4)",
+        "Pac Man (5)",
+        "Pac Man (6)",
+        "Pac Man (7)",
+        "Pac Man (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}

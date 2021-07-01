@@ -1,0 +1,22 @@
+{
+    "skinList": [
+        "Corrin (1)",
+        "Corrin (2)",
+        "Corrin (3)",
+        "Corrin (4)",
+        "Corrin (5)",
+        "Corrin (6)",
+        "Corrin (7)",
+        "Corrin (8)"
+    ],
+    "Left": {
+        "x": -75,
+        "y": 160,
+        "scale": 1.4
+    },
+    "Right": {
+        "x": 650,
+        "y": 0,
+        "scale": 1.3
+    }
+}
