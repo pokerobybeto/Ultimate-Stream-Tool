@@ -82,19 +82,52 @@
 		"Sephiroth",
 		"Pyra & Mythra",
 		"Kazuya",
+		"Sora",
 		"Mii Brawler",
 		"Mii Swordfighter",
 		"Mii Gunner",
 		"Random"
     ],
-    "colorSlots": {
+	"colorSlots": {
         "color0": {
-            "name": "Player 1",
-            "hex": "#ff0000"
+			"name": "Red",
+			"hex": "#fd3232"
+    	},
+ 		"color1": {
+			"name": "Blue",
+        	"hex": "#2985f5"
         },
-        "color1": {
-            "name": "Player 2",
-            "hex": "#0069ec"
+        "color2": {
+            "name": "Yellow",
+        	"hex": "#febc0d"
+        },
+        "color3": {
+			"name": "Green",
+			"hex": "#21b546"
+        },
+        "color4": {
+			"name": "Orange",
+			"hex": "#f88632"
+        },
+        "color5": {
+			"name": "Cyan",
+			"hex": "#26cae2"
+        },
+        "color6": {
+			"name": "Pink",
+			"hex": "#fe9bb5"
+        },
+        "color7": {
+			"name": "Purple",
+			"hex": "#9570fe"
+        },
+        "color8": {
+            "name": "CPU",
+        	"hex": "#ACACAC"
+        },
+		"color9": {
+			"name": "Amiibo",
+			"hex": "#87FFCD"
         }
     }
 }

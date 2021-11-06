@@ -15,6 +15,8 @@ let bestOfPrev;
 const roundSize = '32px';
 const casterSize = '24px';
 const twitterSize = '20px';
+const p1NScoreSize = '60px';
+const p2NScoreSize = '60px';
 
 //variables for the twitter/twitch constant change
 let socialInt1;
@@ -42,6 +44,7 @@ function init() {
 async function getData(scInfo) {
 	let p1Name = scInfo['p1Name'];
 	let p1Team = scInfo['p1Team'];
+	let p1Pron = scInfo['p1Pron']
 	let p1Score = scInfo['p1Score'];
 	let p1Color = scInfo['p1Color'];
 	let p1Character = scInfo['p1Character'];
@@ -50,11 +53,15 @@ async function getData(scInfo) {
 	
 	let p2Name = scInfo['p2Name'];
 	let p2Team = scInfo['p2Team'];
+	let p2Pron = scInfo['p2Pron']
 	let p2Score = scInfo['p2Score'];
 	let p2Color = scInfo['p2Color'];
 	let p2Character = scInfo['p2Character'];
 	let p2Skin = scInfo['p2Skin'];
 	let p2WL = scInfo['p2WL'];
+
+	let p1NScore = scInfo ['p1NScore'];
+	let p2NScore = scInfo ['p2NScore'];
 
 	let round = scInfo['round'];
 	let bestOf = scInfo['bestOf'];
@@ -85,15 +92,15 @@ async function getData(scInfo) {
 				document.getElementById('introVid').play();
 			}, 0); //if you need it to start later, change that 0 (and also update the introDelay)
 
-			if (p1Score + p2Score == 0) { //if this is the first game, introduce players
+			if (p1NScore + p2NScore == 0) { //if this is the first game, introduce players
 
 				const p1IntroEL = document.getElementById('p1Intro');
 				const p2IntroEL = document.getElementById('p2Intro');
 
 				p1IntroEL.textContent = p1Name; //update player 1 intro text
-				p1IntroEL.style.fontSize = '85px'; //resize the font to its max size
+				p1IntroEL.style.fontSize = '60px'; //resize the font to its max size
 				resizeText(p1IntroEL); //resize the text if its too large
-				p2IntroEL.style.fontSize = '85px';
+				p2IntroEL.style.fontSize = '60px';
 				p2IntroEL.textContent = p2Name; //p2
 				resizeText(p2IntroEL);
 
@@ -113,10 +120,10 @@ async function getData(scInfo) {
 
 			} else { //if its not the first game, show game count
 				const midTextEL = document.getElementById('midTextIntro');
-				if ((p1Score + p2Score) != 4) { //if its not the last game of a bo5
+				if ((p1NScore + p2NScore) != 4) { //if its not the last game of a bo5
 
 					//just show the game count in the intro
-					midTextEL.textContent = "Game " + (p1Score + p2Score + 1);
+					midTextEL.textContent = "Game " + (p1NScore + p2NScore + 1);
 
 				} else { //if game 5
 
@@ -148,7 +155,7 @@ async function getData(scInfo) {
 
 		//finally out of the intro, now lets start with player 1 first
 		//update player name and team name texts
-		updatePlayerName('p1Wrapper', 'p1Name', 'p1Team', p1Name, p1Team);
+		updatePlayerName('p1Wrapper', 'p1Name', 'p1Team', 'p1Pron', p1Name, p1Team, p1Pron);
 		//sets the starting position for the player text, then fades in and moves the p1 text to the next keyframe
 		gsap.fromTo("#p1Wrapper", 
 			{x: -pMove}, //from
@@ -180,7 +187,7 @@ async function getData(scInfo) {
 
 
 		//took notes from player 1? well, this is exactly the same!
-		updatePlayerName('p2Wrapper', 'p2Name', 'p2Team', p2Name, p2Team);
+		updatePlayerName('p2Wrapper', 'p2Name', 'p2Team', 'p2Pron', p2Name, p2Team, p2Pron);
 		gsap.fromTo("#p2Wrapper", 
 			{x: pMove},
 			{delay: introDelay+.1, x: 0, opacity: 1, ease: "power2.out", duration: fadeInTime});
@@ -217,6 +224,17 @@ async function getData(scInfo) {
 		if (round != "") {
 			gsap.to("#overlayRound", {delay: introDelay, opacity: 1, ease: "power2.out", duration: fadeInTime+.2});
 		}
+
+		updatep1NScore(p1NScore);
+		updatep2NScore(p2NScore);
+
+		gsap.fromTo("#p1NScore", 
+			{x: -pMove}, //from
+			{delay: introDelay+.2, x: 0, opacity: 1, ease: "power2.out", duration: fadeInTime}); //to
+
+		gsap.fromTo("#p2NScore", 
+			{x: pMove}, //from
+			{delay: introDelay+.2, x: 0, opacity: 1, ease: "power2.out", duration: fadeInTime}); //to
 
 		//set the caster info
 		updateSocialText("caster1N", caster1, casterSize, "caster1TextBox");
@@ -269,17 +287,18 @@ async function getData(scInfo) {
 	//now things that will happen constantly
 	else {
 		
-		//player 1 time!
-		if (document.getElementById('p1Name').textContent != p1Name ||
-			document.getElementById('p1Team').textContent != p1Team) {
-			//move and fade out the player 1's text
-			fadeOutMove("#p1Wrapper", -pMove, () => {
-				//now that nobody is seeing it, quick, change the text's content!
-				updatePlayerName('p1Wrapper', 'p1Name', 'p1Team', p1Name, p1Team);
-				//fade the name back in with a sick movement
-				fadeInMove("#p1Wrapper");
-			});
-		}
+	//player 1 time!
+	if (document.getElementById('p1Name').textContent != p1Name ||
+	document.getElementById('p1Team').textContent != p1Team ||
+	document.getElementById('p1Pron').textContent != p1Pron) {
+	//move and fade out the player 1's text
+	fadeOutMove("#p1Wrapper", -pMove, () => {
+		//now that nobody is seeing it, quick, change the text's content!
+		updatePlayerName('p1Wrapper', 'p1Name', 'p1Team', 'p1Pron', p1Name, p1Team, p1Pron);
+		//fade the name back in with a sick movement
+		fadeInMove("#p1Wrapper");
+	});
+}
 
 		//player 1's character portrait change
 		if (p1CharacterPrev != p1Character || p1SkinPrev != p1Skin) {
@@ -334,11 +353,12 @@ async function getData(scInfo) {
 		}
 
 
-		//did you pay attention earlier? Well, this is the same as player 1!
-		if (document.getElementById('p2Name').textContent != p2Name ||
-			document.getElementById('p2Team').textContent != p2Team){
+			//did you pay attention earlier? Well, this is the same as player 1!
+			if (document.getElementById('p2Name').textContent != p2Name ||
+			document.getElementById('p2Team').textContent != p2Team ||
+			document.getElementById('p2Pron').textContent != p2Pron) {
 			fadeOutMove("#p2Wrapper", pMove, () => {
-				updatePlayerName('p2Wrapper', 'p2Name', 'p2Team', p2Name, p2Team);
+				updatePlayerName('p2Wrapper', 'p2Name', 'p2Team', 'p2Pron', p2Name, p2Team, p2Pron);
 				fadeInMove("#p2Wrapper");
 			});
 		}
@@ -419,6 +439,23 @@ async function getData(scInfo) {
 				updateRound(round);
 				if (round != "") {
 					fadeIn("#overlayRound");
+				}
+			});
+		}
+
+		if (document.getElementById('p1NScore').textContent != p1NScore){
+			fadeOut("#p1NScore", () => {
+				updatep1NScore(p1NScore);
+				if (p1NScore != "") {
+					fadeIn("#p1NScore");
+				}
+			});
+		}
+		if (document.getElementById('p2NScore').textContent != p2NScore){
+			fadeOut("#p2NScore", () => {
+				updatep2NScore(p2NScore);
+				if (p2NScore != "") {
+					fadeIn("#p2NScore");
 				}
 			});
 		}
@@ -616,13 +653,16 @@ function updateSocial(mainSocial, mainText, mainBox, otherSocial, otherBox) {
 }
 
 //player text change
-function updatePlayerName(wrapperID, nameID, teamID, pName, pTeam) {
+function updatePlayerName(wrapperID, nameID, teamID, pronID, pName, pTeam, pPron) {
 	const nameEL = document.getElementById(nameID);
 	nameEL.style.fontSize = '40px'; //set original text size
 	nameEL.textContent = pName; //change the actual text
 	const teamEL = document.getElementById(teamID);
 	teamEL.style.fontSize = '20px';
 	teamEL.textContent = pTeam;
+	const pronEL = document.getElementById(pronID);
+	pronEL.style.fontSize = '20px';
+	pronEL.textContent = pPron;
 	resizeText(document.getElementById(wrapperID)); //resize if it overflows
 }
 
@@ -650,6 +690,20 @@ function updateSocialText(textID, textToType, maxSize, wrapper) {
 	resizeText(wrapperEL); //resize it if it overflows
 }
 
+//nscore change
+function updatep1NScore(p1NScore) {
+	const p1NScoreEL = document.getElementById('p1NScore');
+	p1NScoreEL.style.fontSize = p1NScoreSize; //set original text size
+	p1NScoreEL.textContent = p1NScore; //change the actual text
+	resizeText(p1NScoreEL); //resize it if it overflows
+}
+
+function updatep2NScore(p2NScore) {
+	const p2NScoreEL = document.getElementById('p2NScore');
+	p2NScoreEL.style.fontSize = p2NScoreSize; //set original text size
+	p2NScoreEL.textContent = p2NScore; //change the actual text
+	resizeText(p2NScoreEL); //resize it if it overflows
+}
 
 //fade out
 function fadeOut(itemID, funct) {
@@ -748,6 +802,7 @@ function resizeText(textEL) {
 		}
 	}
 }
+
 //returns a smaller fontSize for the given element
 function getFontSize(textElement) {
 	return (parseFloat(textElement.style.fontSize.slice(0, -2)) * .90) + 'px';
@@ -756,10 +811,26 @@ function getFontSize(textElement) {
 //color codes here!
 function getHexColor(color) {
 	switch (color) {
-		case "Player 1":
-			return "#ff0000";
-		case "Player 2":
-			return "#0069ec";
+		case "Red":
+			return "#fd3232";
+		case "Blue":
+			return "#2985f5";
+		case "Yellow":
+			return "#febc0d";	
+		case "Green":
+			return "#21b546";
+		case "Orange":
+			return "#f88632";	
+		case "Cyan":
+			return "#26cae2";
+		case "Pink":
+			return "#fe9bb5";
+		case "Purple":
+			return "#9570fe";
+		case "CPU":
+			return "#ACACAC";
+		case "Amiibo":
+			return "#87FFCD";				
 	}
 }
 
@@ -799,13 +870,13 @@ function getCharInfo(pCharacter) {
 async function updateChar(pCharacter, pSkin, charID, sagaID) {
 	const charEL = document.getElementById(charID);
 	//change the image path depending on the character and skin
-	charEL.setAttribute('src', 'Resources/Characters/Stock Icons - Scoreboard/' + pCharacter + '/' + pSkin + '.png');
+	charEL.setAttribute('src', 'Resources/Characters/Stock Icons/' + pCharacter + '/' + pSkin + '.png');
 	//add a listener to show the random portrait if the image fails to load
 	if (startup) {charEL.addEventListener("error", () => {
 		if (charEL == document.getElementById("p1Character")) {
-			charEL.setAttribute('src', 'Resources/Characters/Stock Icons - Scoreboard/Random.png');
+			charEL.setAttribute('src', 'Resources/Characters/Stock Icons/Random.png');
 		} else {
-			charEL.setAttribute('src', 'Resources/Characters/Stock Icons - Scoreboard/Random.png');
+			charEL.setAttribute('src', 'Resources/Characters/Stock Icons/Random.png');
 		}
 	})}
 

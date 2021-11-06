@@ -322,19 +322,51 @@ function updateColor(pSlotID, color) {
 	pSlotEL.style.color = getHexColor(color);
 
 	switch (color) {
-		case "Player 1":
-			return "#ff0000";
-		case "Player 2":
-			return "#0069ec";
+		case "Red":
+			return "#fd3232";
+		case "Blue":
+			return "#2985f5";
+		case "Yellow":
+			return "#febc0d";	
+		case "Green":
+			return "#21b546";
+		case "Orange":
+			return "#f88632";	
+		case "Cyan":
+			return "#26cae2";
+		case "Pink":
+			return "#fe9bb5";
+		case "Purple":
+			return "#9570fe";
+		case "CPU":
+			return "#ACACAC";
+		case "Amiibo":
+			return "#87FFCD";
 	}
 }
 //color codes here!
 function getHexColor(color) {
 	switch (color) {
-		case "Player 1":
-			return "#ff0000";
-		case "Player 2":
-			return "#0069ec";
+		case "Red":
+			return "#fd3232";
+		case "Blue":
+			return "#2985f5";
+		case "Yellow":
+			return "#febc0d";	
+		case "Green":
+			return "#21b546";
+		case "Orange":
+			return "#f88632";	
+		case "Cyan":
+			return "#26cae2";
+		case "Pink":
+			return "#fe9bb5";
+		case "Purple":
+			return "#9570fe";
+		case "CPU":
+			return "#ACACAC";
+		case "Amiibo":
+			return "#87FFCD";
 	}
 }
 

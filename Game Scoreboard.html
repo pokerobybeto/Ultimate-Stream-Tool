@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Melee Game Overlay</title>
+    <title>Ultimate Game Overlay</title>
 
     <script src="Resources/Scripts/Game Scoreboard.js"></script>
     <script src="Resources/Scripts/gsap.min.js"></script>
@@ -29,10 +29,7 @@
             font-family: "Smash";
             src: url('Resources/Fonts/FOT-RodinBokutohPro-UB.otf');
         }
-            @font-face {
-            font-family: "The-Wild-Breath-of-Zelda";
-            src: url('Resources/Fonts/The-Wild-Breath-of-Zelda.otf');
-        }
+       
 
         body {
             width: 1920px;
@@ -70,17 +67,17 @@
         }
 
         .rect {
-            width: 257px;
-            height: 355px;
+            width: 588px;
+            height: 9px;
             position: absolute;
         }
         #p1Color {
-            left: 10000px;
-            top: 10px;
+            left: 162px;
+            top: 316px;
         }
         #p2Color {
-            right: 10000px;
-            top: 10px;
+            right: -378px;
+            top: 316px;
         }
 
 
@@ -119,10 +116,10 @@
 
         .wrappers {
             position: absolute;
-            width: 255px;
+            width: 330px;
             height: 54px;
             line-height: 54px;
-            top: 355px;
+            top: 350px;
             opacity: 0;
             color: white;
         }
@@ -143,11 +140,14 @@
             color: rgb(255, 255, 255);
         }
 
+        .pronouns {
+            color: #ffffff;
+            font-style: italic;
+        }
 
         .scores {
             position: absolute;
             top: 415px;
-            filter: drop-shadow(0px 0px 0px black);
         }
         #scoresP2 {
             right: 35px;
@@ -160,36 +160,45 @@
         #win1P1 {
             top: -320px;
             left: 715px;
+            display: none;
         }
         #win2P1 {
             top: -320px;
             left: 740px;
+            display: none;
         }
         #win3P1 {
             top: -320px;
             left: 765px;
+            display: none;
         }
         #wlP1 {
-            top: -320px;
-            left: 790px;
+            top: -309px;
+            right: -384px;
+            transform: scale(0.578);
         }
         #win1P2 {
             top: -320px;
             right: -685px;
+            display: none;
         }
         #win2P2 {
             top: -320px;
             right: -710px;
+            display: none;
         }
         #win3P2 {
             top: -320px;
             right: -735px;
+            display: none;
         }
         #wlP2 {
-            top: -320px;
-            right: -760px;
+            top: -309px;
+            right: -349px;
+            transform: scale(0.578);
         }
 
+     
 
         #overlayRound {
             position: absolute;
@@ -200,10 +209,10 @@
 
         #round {
             position: absolute;
-            width: 263px;
-            height: 50px;
-            left: 805PX;
-            top: -975px;
+            width: 160px;
+            height: 40px;
+            left: 860PX;
+            top: -965px;
             text-align: center;
             font-family: "Smash";
             color: #ffffff;
@@ -214,13 +223,32 @@
             width: 263px;
             height: 50px;
             left: 805px;
-            top: -925px;
+            top: -935px;
             text-align: center;
             font-family: "Smash";
             font-size: 20px;
             color: #ffffff;
         }
 
+        #p1NScore {
+        position: absolute;
+        top: 12px;
+        left: 720px;
+        text-align: right;
+        opacity: 0;
+        width: 154px;
+        height: 100px;
+        }
+
+        #p2NScore {
+        position: absolute;
+        top: 12px;
+        right: 720px;
+        text-align: left;
+        opacity: 0;
+        width: 154px;
+        height: 100px;
+        }
 
         #overlayCasters {
             position: absolute;
@@ -401,6 +429,7 @@
         <span id="p1Wrapper" class="wrappers">
             <span id="p1Team" class="teams"></span>
             <span id="p1Name" class="names"></span>
+            <span id="p1Pron" class="pronouns"></span>
         </span>
     </div>
     
@@ -449,7 +478,16 @@
         <span id="p2Wrapper" class="wrappers">
             <span id="p2Team" class="teams"></span>
             <span id="p2Name" class="names"></span>
+            <span id="p2Pron" class="pronouns"></span>
         </span>
+    </div>
+
+    <div id="p1NScore">
+        <span id="p1NScore"></span>
+    </div>
+
+    <div id="p2NScore">
+        <span id="p2NScore"></span>
     </div>
     
     <div id="scoresP2" class="scores">
