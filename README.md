@@ -12,9 +12,9 @@ If you are also interested in adapting your layout with the stream tool or havin
 ---
 
 ## Features
-- [Handy interface](https://pbs.twimg.com/media/E4AECGHVoAI92yx?format=jpg&name=medium) to quickly change everything you need, like player names, characters, scores, round, casters...
+- [Handy interface](https://pbs.twimg.com/media/FMEbkQ2XEAgQV22?format=jpg&name=large) to quickly change everything you need, like player names, characters, scores, round, casters...
 - Easy and fast setup using a browser source. Drag and drop!
-- A [game overlay](https://pbs.twimg.com/media/E4AEEPVUYAIc19i?format=jpg&name=large) is included, with renders for all characters and skins!
+- A [game overlay](https://pbs.twimg.com/media/FMEbkQ2XEAgQV22?format=jpg&name=large) is included, with renders for all characters and skins!
 - A [VS Screen](https://pbs.twimg.com/media/E4AELv_VcAQTj5Q?format=jpg&name=large) is also included, to be used in pauses between games.
 - A [Caster Screen](https://pbs.twimg.com/media/FMEbnOaXIAIqeye?format=jpg&name=large) is also included, with a simple overlay on which to write nicks and social networks .
 - Easy to customize! Made in html/javascript, every file can be edited at will!
