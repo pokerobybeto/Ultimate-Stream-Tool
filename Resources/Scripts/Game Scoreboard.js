@@ -15,8 +15,9 @@ let bestOfPrev;
 const roundSize = '32px';
 const casterSize = '24px';
 const twitterSize = '20px';
-const p1NScoreSize = '60px';
-const p2NScoreSize = '60px';
+const p1NScoreSize = '55px';
+const p2NScoreSize = '55px';
+const formatSize = '28px';
 
 //variables for the twitter/twitch constant change
 let socialInt1;
@@ -65,6 +66,7 @@ async function getData(scInfo) {
 
 	let round = scInfo['round'];
 	let bestOf = scInfo['bestOf'];
+	let format = scInfo['format'];
 
 	let caster1 = scInfo['caster1Name'];
 	twitter1 = scInfo['caster1Twitter'];
@@ -214,16 +216,23 @@ async function getData(scInfo) {
 
 		//update the round text
 		updateRound(round);
+		gsap.fromTo("#overlayRound", 
+			{x: -pMove}, //from
+			{delay: introDelay, opacity: 1, ease: "power2.out", duration: fadeInTime}); //to
+
+		updateFormat(format);
 		//update the best of text
 		if (bestOf == "Bo5") {
-			document.getElementById('bestOf').textContent = "Best of 5";
+			document.getElementById('bestOf').textContent = "First to ";
 		} else {
-			document.getElementById('bestOf').textContent = "Best of 3";
+			document.getElementById('bestOf').textContent = "Best of ";
 		}
 		//fade them in (but only if round text is not empty)
-		if (round != "") {
-			gsap.to("#overlayRound", {delay: introDelay, opacity: 1, ease: "power2.out", duration: fadeInTime+.2});
+		if (format != "") {
+			gsap.to("#overlayFormat", 
+			{delay: introDelay, opacity: 1, ease: "power2.out", duration: fadeInTime+.2});
 		}
+		
 
 		updatep1NScore(p1NScore);
 		updatep2NScore(p2NScore);
@@ -339,7 +348,7 @@ async function getData(scInfo) {
 
 		//change the player's colors
 		if (p1ColorPrev != p1Color) {
-			updateColor('p1Color', 'p1Name', p1Color);
+			updateColor('p1Color', 'p1Team', p1Color);
 			updateScore(1, p1Score, p1Color);
 			p1ColorPrev = p1Color;
 		}
@@ -391,7 +400,7 @@ async function getData(scInfo) {
 		}
 
 		if (p2ColorPrev != p2Color) {
-			updateColor('p2Color', 'p2Name', p2Color);
+			updateColor('p2Color', 'p2Team', p2Color);
 			updateScore(2, p2Score, p2Color);
 			p2ColorPrev = p2Color;
 		}
@@ -415,7 +424,7 @@ async function getData(scInfo) {
 					{x: 0, opacity: 1, ease: "power2.out", duration: fadeInTime});
 				
 				fadeOut("#bestOf", () => {
-					document.getElementById('bestOf').textContent = "Best of 5";
+					document.getElementById('bestOf').textContent = "First to ";
 					fadeIn("#bestOf");
 				});
 			} else {
@@ -425,7 +434,7 @@ async function getData(scInfo) {
 					{x: pMove, opacity: 0, ease: "power2.in", duration: fadeInTime});
 
 				fadeOut("#bestOf", () => {
-					document.getElementById('bestOf').textContent = "Best of 3";
+					document.getElementById('bestOf').textContent = "Best of ";
 					fadeIn("#bestOf");
 				});
 			}
@@ -439,6 +448,15 @@ async function getData(scInfo) {
 				updateRound(round);
 				if (round != "") {
 					fadeIn("#overlayRound");
+				}
+			});
+		}
+
+		if (document.getElementById('format').textContent != format){
+			fadeOut("#overlayFormat", () => {
+				updateFormat(format);
+				if (format != "") {
+					fadeIn("#overlayFormat");
 				}
 			});
 		}
@@ -655,7 +673,7 @@ function updateSocial(mainSocial, mainText, mainBox, otherSocial, otherBox) {
 //player text change
 function updatePlayerName(wrapperID, nameID, teamID, pronID, pName, pTeam, pPron) {
 	const nameEL = document.getElementById(nameID);
-	nameEL.style.fontSize = '50px'; //set original text size
+	nameEL.style.fontSize = '40px'; //set original text size
 	nameEL.textContent = pName; //change the actual text
 	const teamEL = document.getElementById(teamID);
 	teamEL.style.fontSize = '20px';
@@ -672,6 +690,13 @@ function updateRound(round) {
 	roundEL.style.fontSize = roundSize; //set original text size
 	roundEL.textContent = round; //change the actual text
 	resizeText(roundEL); //resize it if it overflows
+}
+
+function updateFormat(format) {
+	const formatEL = document.getElementById('format');
+	formatEL.style.fontSize = formatSize; //set original text size
+	formatEL.textContent = format; //change the actual text
+	resizeText(formatEL); //resize it if it overflows
 }
 
 //generic text changer

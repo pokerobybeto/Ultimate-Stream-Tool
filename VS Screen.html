@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Melee VS Screen</title>
+    <title>Ultimate VS Screen</title>
 
     <script src="Resources/Scripts/VS Screen.js"></script>
     <script src="Resources/Scripts/gsap.min.js"></script>
@@ -37,10 +37,14 @@
             background: transparent;
             padding: 0px;
             margin: 0px;
-            text-transform: uppercase;
             white-space: nowrap;
         }
 
+        #logo {
+           left: 860px;
+           top: 780px;
+           filter: drop-shadow(0px 0px 10px black);
+        }
 
         .absol {
             position: absolute;
@@ -63,6 +67,7 @@
             white-space: nowrap;
             opacity: 0;
             transform: rotate(-2deg);
+            text-transform: uppercase;
         }
         #p1Wrapper {
             left: 2.5%;
@@ -117,24 +122,26 @@
             width: 500px;
             height: 70px;
             left: 710px;
-            top: 720px;
+            top: 710px;
             color: white;
             line-height: 38px;
+            text-transform: uppercase;
         }
 
         #tournament {
             width: 465px;
             height: 40px;
             left: 727px;
-            top: 685px;
+            top: 670px;
             color: lightgray;
             line-height: 28px;
+            text-transform: uppercase;
         }
 
 
         #casterInfo {
             position: absolute;
-            top: 950px;
+            top: 985px;
             filter: drop-shadow(0px 0px 10px black);
         }
         #caster1 {
@@ -167,7 +174,7 @@
             position: absolute;
             width: 275px;
             height: 36px;
-            bottom: -75px;
+            bottom: -78px;
             text-align: center;
         }
         .twitterIcon {
@@ -180,7 +187,7 @@
             position: absolute;
             width: 275px;
             height: 36px;
-            bottom: -75px;
+            bottom: -78px;
             text-align: center;
         }
         .twitchIcon {
@@ -199,6 +206,8 @@
 
 <body>
         <img class="absol" src="Resources/Overlay/VS Screen/background.png" ></img>
+
+
 
     <div id="charas">
         <div class="absol">
@@ -306,6 +315,10 @@
         </div>
 
     </div>
-    
+    <div id="logo" class="logo">
+
+        <img src="Resources/Overlay/Logo.png" id="logo" class="absol">
+
+    </div>
 </body>
 </html>

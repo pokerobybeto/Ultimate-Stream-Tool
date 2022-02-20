@@ -43,6 +43,11 @@
             white-space: nowrap;
         }
 
+        #logo {
+           left: 860px;
+           top: 10px;
+        }
+
         .mirror {
             transform: scaleX(-1);
         }
@@ -68,33 +73,33 @@
 
         .rect {
             width: 588px;
-            height: 9px;
+            height: 63px;
+            top: 346px;
+            z-index: -10;
             position: absolute;
         }
         #p1Color {
-            left: 162px;
-            top: 316px;
+            left: 161px;
         }
         #p2Color {
-            right: -378px;
-            top: 316px;
+            right: -375px;
         }
 
 
         .pCharacter {
             position: absolute;
             top: 0px;
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             opacity: 0;
         }
         #p1Character { 
-            left: 177px;
-            top: 338px;
+            left: 240px;
+            top: 345px;
         }
         #p2Character {
-            right: -364px;
-            top: 338px;
+            right: -296px;
+            top: 345px;
         }
 
 
@@ -117,31 +122,29 @@
         .wrappers {
             position: absolute;
             width: 330px;
-            height: 60px;
+            height: 54px;
             line-height: 54px;
-            top: 340px;
+            top: 342px;
             opacity: 0;
             color: white;
         }
 
         #p1Wrapper {
-            left: 250px;
+            left: 297px;
             text-align: left;
          
         }
 
         #p2Wrapper {
-            right: -290px;
+            right: -236px;
             text-align: right;
    
         }
 
         .teams {
-            color: rgb(255, 255, 255);
         }
 
         .pronouns {
-            color: #ffffff;
             font-style: italic;
         }
 
@@ -173,9 +176,9 @@
             display: none;
         }
         #wlP1 {
-            top: -309px;
-            right: -384px;
-            transform: scale(0.578);
+            top: -311px;
+            right: -382px;
+            transform: scale(0.545);
         }
         #win1P2 {
             top: -320px;
@@ -193,67 +196,87 @@
             display: none;
         }
         #wlP2 {
-            top: -309px;
-            right: -349px;
-            transform: scale(0.578);
+            top: -311px;
+            right: -351px;
+            transform: scale(0.545);
         }
 
      
 
         #overlayRound {
             position: absolute;
-            left: 20px;
+            left: 40px;
             bottom: 70px;
             opacity: 0;
         }
 
-        #round {
+        #overlayFormat {
             position: absolute;
-            width: 160px;
-            height: 40px;
-            left: 860PX;
-            top: -965px;
+            left: 10px;
+            bottom: 70px;
+            opacity: 0;
+        }
+
+        #format {
+            position: absolute;
+            left: 1213px;
+            top: -903px;
             text-align: center;
             font-family: "Smash";
-            color: #ffffff;
+            color: #000000;
+        } 
+
+        #round {
+            position: absolute;
+            width: 230px;
+            height: 40px;
+            left: 602PX;
+            top: -898px;
+            text-align: center;
+            font-family: "Smash";
+            color: #000000;
         }
 
         #bestOf {
             position: absolute;
             width: 263px;
             height: 50px;
-            left: 805px;
-            top: -935px;
+            left: 1020px;
+            top: -903px;
             text-align: center;
             font-family: "Smash";
-            font-size: 20px;
-            color: #ffffff;
+            font-size: 28px;
+            color: #000000;
         }
 
         #p1NScore {
         position: absolute;
-        top: 12px;
-        left: 720px;
-        text-align: right;
+        top: 22px;
+        left: 367px;
+        text-align: center;
         opacity: 0;
-        width: 154px;
-        height: 100px;
+        width: 85px;
+        height: 85px;
+        letter-spacing: -5px;
+        color: #101012;
         }
 
         #p2NScore {
         position: absolute;
-        top: 12px;
-        right: 720px;
-        text-align: left;
+        top: 22px;
+        right: 377px;
+        text-align: center;
         opacity: 0;
-        width: 154px;
-        height: 100px;
+        width: 85px;
+        height: 85px;
+        letter-spacing: -5px;
+        color: #101012;
         }
 
         #overlayCasters {
             position: absolute;
             right: 12px;
-            bottom: 25px;
+            bottom: 50px;
             opacity: 1;
             transform: scale(1.1);
             filter: drop-shadow(0px 0px 3px black);
@@ -414,6 +437,13 @@
  
     <img class="absol" src="Resources/Overlay/Scoreboard.png">
 
+    <div id="logo" class="logo">
+
+        <img src="Resources/Overlay/Logo.png" id="logo" class="absol">
+
+    </div>
+ 
+
 
     <div id="overlayP1" class="scoreboardP1">
        
@@ -521,7 +551,11 @@
 
     <div id="overlayRound">
         <span id="round"></span>
-        <span id="bestOf">Best of 5</span>
+    </div>
+
+    <div id="overlayFormat">
+        <span id="bestOf"></span>
+        <span id="format"></span>
     </div>
 
     <div id="overlayCasters">

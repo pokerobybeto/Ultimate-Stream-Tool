@@ -1,0 +1,1 @@
+You can change your overlays by simply replacing "Logo.png", "Scoreboard.png" and "Caster Scren.png". Your logo must be in 200x200 resolution, while "Scoreboard" and "Caster Screen" 1920x1080. You can change other screen elements such as player names and scores from "Game Scoreboard.html" and "Caster Screen.html".
