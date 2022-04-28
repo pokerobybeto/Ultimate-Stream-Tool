@@ -56,9 +56,9 @@ The interface will also update basic text files with the match info at `Resource
 
 ## Customizing stuff
 
-Note: unfortunately, the source code is not available to download. 
+If you want to customize the GUI, thats going to be a bit complicated since you will have to learn how electron works yourself. In any case, the source code is also on this github!
 
-You can still customize how your Scoreboard, VS Screen and Caster Screen look by replacing the files in the overlay folder.
+It is possible to customize how your Scoreboard, VS Screen and Caster Screen look by replacing the files in the overlay folder.
 
 You can also replace the logo simply by adding a 200x200 resolution one.
 
