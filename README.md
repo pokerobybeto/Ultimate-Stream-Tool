@@ -64,8 +64,6 @@ You can also replace the logo simply by adding a 200x200 resolution one.
 
 While to change the position of the icons and writings you should modify parts of the code contained in the `html` and `js` files.
 
-And most importantly, this project was created using [RoA-Stream-Tool](https://github.com/Readek/RoA-Stream-Tool) as a base, so if you wanna go crazy on customizations, I really recomend you to check out that first, since it's way more documented (and also has a wiki!), especially if you wanna adapt this to other games. This Ultimate version is way more locked down.
-
 ---
 
 ## Credits
