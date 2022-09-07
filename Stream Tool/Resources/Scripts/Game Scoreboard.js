@@ -45,7 +45,7 @@ function init() {
 async function getData(scInfo) {
 	let p1Name = scInfo['p1Name'];
 	let p1Team = scInfo['p1Team'];
-	let p1Pron = scInfo['p1Pron']
+	let p1Pron = scInfo['p1Pron'];
 	let p1Score = scInfo['p1Score'];
 	let p1Color = scInfo['p1Color'];
 	let p1Character = scInfo['p1Character'];
@@ -54,7 +54,7 @@ async function getData(scInfo) {
 	
 	let p2Name = scInfo['p2Name'];
 	let p2Team = scInfo['p2Team'];
-	let p2Pron = scInfo['p2Pron']
+	let p2Pron = scInfo['p2Pron'];
 	let p2Score = scInfo['p2Score'];
 	let p2Color = scInfo['p2Color'];
 	let p2Character = scInfo['p2Character'];
@@ -817,7 +817,7 @@ function updateWL(pWL, playerNum) {
 //text resize, keeps making the text smaller until it fits
 function resizeText(textEL) {
 	const childrens = textEL.children;
-	while (textEL.scrollWidth > textEL.offsetWidth || textEL.scrollHeight > textEL.offsetHeight) {
+	while (textEL.scrollWidth > textEL.offsetWidth) {
 		if (childrens.length > 0) { //for team+player texts
 			Array.from(childrens).forEach(function (child) {
 				child.style.fontSize = getFontSize(child);
