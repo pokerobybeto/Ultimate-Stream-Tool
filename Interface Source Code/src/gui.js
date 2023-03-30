@@ -591,23 +591,11 @@ function checkScore(tick1, tick2, tick3) {
 
 //gives a victory to player 1 
 function giveWinP1() {
-    if (p1Win2.checked) {
-        p1Win3.checked = true;
-    } else if (p1Win1.checked) {
-        p1Win2.checked = true;
-    } else if (!p1Win1.checked) {
-        p1Win1.checked = true;
-    }
+p1NScoreInp.value = Number(p1NScoreInp.value) + 1;
 }
 //same with P2
 function giveWinP2() {
-    if (p2Win2.checked) {
-        p2Win3.checked = true;
-    } else if (p2Win1.checked) {
-        p2Win2.checked = true;
-    } else if (!p2Win1.checked) {
-        p2Win1.checked = true;
-    }
+p2NScoreInp.value = Number(p2NScoreInp.value) + 1;
 }
 
 
@@ -772,11 +760,11 @@ function clearPlayers() {
     p1TagInp.value = "";
     p1NameInp.value = "";
     p1PronInp.value = "";
-    p1NScoreInp.value = "";
+    p1NScoreInp.value = "0";
     p2TagInp.value = "";
     p2NameInp.value = "";
     p2PronInp.value = "";
-    p2NScoreInp.value = "";
+    p2NScoreInp.value = "0";
     roundInp.value = "";
     changeInputWidth(p1TagInp);
     changeInputWidth(p1NameInp);
