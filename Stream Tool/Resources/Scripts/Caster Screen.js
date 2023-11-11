@@ -120,10 +120,10 @@ async function getData(scInfo) {
 
 			} else { //if its not the first game, show game count
 				const midTextEL = document.getElementById('midTextIntro');
-				if ((p1NScore + p2NScore) != 4) { //if its not the last game of a bo5
+				if ((parseInt(p1NScore) + parseInt(p2NScore)) != 4) { //if its not the last game of a bo5
 
 					//just show the game count in the intro
-					midTextEL.textContent = "Game " + (p1NScore + p2NScore + 1);
+					midTextEL.textContent = "Game " + (parseInt(p1NScore) + parseInt(p2NScore) + 1);
 
 				} else { //if game 5
 

@@ -94,7 +94,7 @@ async function getData(scInfo) {
 				document.getElementById('introVid').play();
 			}, 0); //if you need it to start later, change that 0 (and also update the introDelay)
 
-			// if (p1NScore + p2NScore == 0) { //if this is the first game, introduce players
+			if (parseInt(p1NScore) + parseInt(p2NScore) == 0) { //if this is the first game, introduce players
 
 				const p1IntroEL = document.getElementById('p1Intro');
 				const p2IntroEL = document.getElementById('p2Intro');
@@ -120,27 +120,27 @@ async function getData(scInfo) {
 					{x: pMove},
 					{delay: introDelay, x: 0, opacity: 1, ease: "power2.out", duration: fadeInTime});
 
-			// } else { //if its not the first game, show game count
-			// 	const midTextEL = document.getElementById('midTextIntro');
-			// 	if ((p1NScore + p2NScore) != 4) { //if its not the last game of a bo5
+			} else { //if its not the first game, show game count
+				const midTextEL = document.getElementById('midTextIntro');
+				if ((parseInt(p1NScore) + parseInt(p2NScore)) != 4) { //if its not the last game of a bo5
 
-			// 		//just show the game count in the intro
-			// 		midTextEL.textContent = "Game " + (p1NScore + p2NScore + 1);
+					//just show the game count in the intro
+					midTextEL.textContent = "Game " + (parseInt(p1NScore) + parseInt(p2NScore) + 1);
 
-			// 	} else { //if game 5
+				} else { //if game 5
 
-			// 		if ((round.toUpperCase() == "True Finals".toUpperCase())) { //if true finals
-			// 			midTextEL.textContent = "True Final Game"; //i mean shit gets serious here
-			// 		} else {
-			// 			midTextEL.textContent = "Final Game";
-			// 			//if GF, we dont know if its the last game or not, right?
-			// 			if (round.toLocaleUpperCase() == "Grand Finals".toLocaleUpperCase() && !(p1WL == "L" && p2WL == "L")) {
-			// 				gsap.to("#superCoolInterrogation", {delay: introDelay+.5, opacity: 1, ease: "power2.out", duration: 1.5});
-			// 			}
+					if ((round.toUpperCase() == "True Finals".toUpperCase())) { //if true finals
+						midTextEL.textContent = "True Final Game"; //i mean shit gets serious here
+					} else {
+						midTextEL.textContent = "Final Game";
+						//if GF, we dont know if its the last game or not, right?
+						if (round.toLocaleUpperCase() == "Grand Finals".toLocaleUpperCase() && !(p1WL == "L" && p2WL == "L")) {
+							gsap.to("#superCoolInterrogation", {delay: introDelay+.5, opacity: 1, ease: "power2.out", duration: 1.5});
+						}
 
-			// 		}
-			// 	}
-			// }
+					}
+				}
+			}
 
 			document.getElementById('roundIntro').textContent = round;
 			document.getElementById('tNameIntro').textContent = tournamentName;
