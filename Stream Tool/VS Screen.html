@@ -26,8 +26,13 @@
             src: url('Resources/Fonts/Roboto-Bold.ttf');
         }
         @font-face {
-            font-family: "Smash";
+            font-family: "Lemon Milk";
             src: url('Resources/Fonts/FOT-RodinBokutohPro-UB.otf');
+        }
+
+        @font-face {
+            font-family: "Lemon Milk";
+            src: url('Resources/Fonts/LEMONMILK-Regular.otf');
         }
 
         body {
@@ -43,7 +48,10 @@
         #logo {
            left: 860px;
            top: 780px;
-           filter: drop-shadow(0px 0px 10px black);
+           width: 200px;
+           height: 200px;
+            /* filter: drop-shadow(0px 0px 10px black); */
+
         }
 
         .absol {
@@ -60,14 +68,17 @@
             position: absolute;
             width: 45%;
             height: 130px;
-            top: 35px;
+            top: 15px;
             line-height: 90px;
-            font-family: "Smash";
+            font-family: "Lemon Milk";
             text-align: center;
             white-space: nowrap;
             opacity: 0;
             transform: rotate(-2deg);
             text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         #p1Wrapper {
             left: 2.5%;
@@ -80,9 +91,14 @@
             color: white;
         }
         .team {
-            color: lightgray;
+            color: white;
         }
 
+        .team::after {
+            content: '|';
+            display: inline-block;
+            margin: 0 5px;
+        }
 
         .pInfo {
             display: none;
@@ -91,7 +107,7 @@
             height: 120px;
             top: 55px;
             line-height: 90px;
-            font-family: "Smash";
+            font-family: "Lemon Milk";
             text-align: center;
             font-size: 50px;
             text-transform: capitalize;
@@ -114,7 +130,7 @@
         .roundInfo {
             position: absolute;
             text-align: center;
-            font-family: "Smash";
+            font-family: "Lemon Milk";
             filter: drop-shadow(0px 0px 10px black);
         }
 
@@ -166,7 +182,7 @@
         }
         .casterText {
             font-size: 22px;
-            font-family: "Smash";
+            font-family: "Lemon Milk";
             color: white;
         }
 
@@ -176,6 +192,7 @@
             height: 36px;
             bottom: -78px;
             text-align: center;
+            display: none;
         }
         .twitterIcon {
             height: 24px;
@@ -189,6 +206,7 @@
             height: 36px;
             bottom: -78px;
             text-align: center;
+            display: none;
         }
         .twitchIcon {
             height: 20px;
@@ -198,7 +216,7 @@
         }
         .socialText {
             font-size: 18px;
-            font-family: "Smash";
+            font-family: "Lemon Milk";
             color: lightgrey;
         }
     </style>

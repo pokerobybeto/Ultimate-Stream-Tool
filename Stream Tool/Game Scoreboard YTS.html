@@ -2,29 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Ultimate Caster Overlay</title>
+    <title>Ultimate Game Overlay</title>
 
-    <script src="Resources/Scripts/Caster Screen.js"></script>
+    <script src="Resources/Scripts/Game Scoreboard.js"></script>
     <script src="Resources/Scripts/gsap.min.js"></script>
     
 
     <style>
+
         @font-face {
             font-family: "Deansgate";
             src: url('Resources/Fonts/DeansgateCondensed-Bold.ttf');
         }
+
         @font-face {
             font-family: "FolkMedium";
             src: url('Resources/Fonts/A-OTF-FolkPro-Medium.otf');
         }
+
         @font-face {
             font-family: "FolkHeavy";
             src: url('Resources/Fonts/A-OTF-FolkPro-Heavy.otf');
         }
+
         @font-face {
             font-family: "Roboto";
             src: url('Resources/Fonts/Roboto-Bold.ttf');
         }
+
         @font-face {
             font-family: "Smash";
             src: url('Resources/Fonts/FOT-RodinBokutohPro-UB.otf');
@@ -35,7 +40,6 @@
             src: url('Resources/Fonts/LEMONMILK-Regular.otf');
         }
        
-
         body {
             width: 1920px;
             height: 1080px;
@@ -50,9 +54,10 @@
 
         #logo {
            left: 860px;
-           top: 875px;
+           top: -9px;
            width: 200px;
            height: 200px;
+           display: none;
         }
 
         .mirror {
@@ -64,34 +69,41 @@
             left: 0px;
             top: 0px;
         }
+       
+        .scoreboardP1,
+        .scoreboardP2 {
+            position: absolute;
+            top: -310px;
+        }
 
         .scoreboardP1 {
-            position: absolute;
             left: 210px;
-            top: -295px;
         }
 
         .scoreboardP2 {
-            position: absolute;
             right: 750px;
-            top: -295px;
         }
 
         .rect {
-            width: 575px;
-            height: 69px;
-            top: 1217px;
-            z-index: -10;
             position: absolute;
-            display: none;
-        }
-        #p1Color {
-            left: 174px;
-        }
-        #p2Color {
-            right: -361px;
+            top: 345.5px;
+            width: 600px;
+            height: 75px;
+            z-index: -10;
         }
 
+        #p1Color,
+        #p2Color {
+            display: none;
+        }
+
+        #p1Color {
+            left: 161px;
+        }
+
+        #p2Color {
+            right: -375px;
+        }
 
         .pCharacter {
             position: absolute;
@@ -99,18 +111,17 @@
             width: 50px;
             height: 50px;
             opacity: 0;
-            display: none;
         }
+
         #p1Character { 
-            left: 240px;
-            top: 345px;
+            left: 150px;
+            top: 360px;
         }
+
         #p2Character {
-            right: -296px;
-            top: 345px;
+            right: -386px;
+            top: 360px;
         }
-
-
 
         .teamLogo {
             position: absolute;
@@ -119,9 +130,11 @@
             height: 60px;
             opacity: 0;
         }
+
         #teamLogoP1 {
             left: 8px;
         }
+
         #teamLogoP2 {
             right: 8px;
         }
@@ -129,28 +142,41 @@
 
         .wrappers {
             position: absolute;
-            width: 330px;
-            height: 54px;
-            line-height: 54px;
-            top: 342px;
+            width: 366px;
+            height: 75px;
+            line-height: 75px;
+            top: 346px;
+            /* opacity: 0.5 !important; */
             opacity: 0;
             color: white;
-            display: none;
+            text-align: center;
+            /* background: lime; */
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         #p1Wrapper {
-            left: 297px;
-            text-align: left;
-         
+            left: 199px;
+            /* text-align: right; */
         }
 
         #p2Wrapper {
-            right: -236px;
-            text-align: right;
+            right: -340px;
+            /* text-align: left; */
    
         }
 
-        .teams {
+        .teams,
+        .names,
+        .pronouns {
+            font-family: "Lemon Milk";
+        }
+
+        .teams::after {
+            content: '|';
+            display: inline-block;
+            margin: 0 5px;
         }
 
         .pronouns {
@@ -161,226 +187,231 @@
         .scores {
             position: absolute;
             top: 415px;
-            display: none;
         }
+
         #scoresP2 {
             right: 35px;
             transform: scaleX(-1);
         }
+
         .scoreTick {
             position: absolute;
             opacity: 0;
         }
+
+        #wlP1,
+        #wlP2 {
+            top: -316px;
+            transform: scale(0.545);
+        }
+
+        #wlP1 {
+            left: 790px;
+        }
+
+        #wlP2 {
+            right: -757px;
+        }
+
         #win1P1 {
             top: -320px;
             left: 715px;
             display: none;
         }
+
         #win2P1 {
             top: -320px;
             left: 740px;
             display: none;
         }
+
         #win3P1 {
             top: -320px;
             left: 765px;
             display: none;
         }
-        #wlP1 {
-            top: -311px;
-            right: -382px;
-            transform: scale(0.545);
-        }
+
         #win1P2 {
             top: -320px;
             right: -685px;
             display: none;
         }
+
         #win2P2 {
             top: -320px;
             right: -710px;
             display: none;
         }
+
         #win3P2 {
             top: -320px;
             right: -735px;
             display: none;
         }
-        #wlP2 {
-            top: -311px;
-            right: -351px;
-            transform: scale(0.545);
-        }
-
-     
 
         #overlayRound {
             position: absolute;
-            left: 20px;
+            left: 40px;
             bottom: 70px;
             opacity: 0;
-            display: none;
+        }
+
+        #overlayFormat {
+            position: absolute;
+            left: 10px;
+            bottom: 70px;
+            opacity: 0;
         }
 
         #round {
+            text-transform: uppercase;
             position: absolute;
-            width: 230px;
-            height: 40px;
-            left: 602PX;
-            top: -898px;
+            width: 270px;
+            height: 75px;
+            line-height: 75px;
+            left: 25px;
+            top: -974px;
             text-align: center;
             font-family: "Smash";
-            color: #101012;
+            color: #000000;
+            /* background-color: maroon; */
+            /* opacity: 0.5; */
         }
 
         #bestOf {
             position: absolute;
-            width: 263px;
-            height: 50px;
-            left: 1020px;
-            top: -903px;
+            width: 110px;
+            height: 35px;
+            left: 20px;
+            top: -896px;
             text-align: center;
             font-family: "Smash";
-            font-size: 28px;
+            line-height: 35px;
+            color: #000;
+            /* color: lime; */
+            /* background-color: maroon; */
+            /* opacity: 0.5; */
+        }
+
+        #format {
+            position: absolute;
+            left: 113px;
+            top: -896px;
+            text-align: center;
+            font-family: "Smash";
+            line-height: 35px;
+            font-size: 16px !important;
+            color: #000;
+            /* color: forestgreen; */
+            /* background-color: goldenrod; */
+            /* opacity: 0.5; */
+        } 
+
+        #p1NScore,
+        #p2NScore {
+            /* background: maroon; */
+            position: absolute;
+            top: 46px;
+            text-align: center;
+            opacity: 0;
+            width: 55px;
+            height: 55px;
+            line-height: 50px;
             color: #101012;
         }
 
         #p1NScore {
-        position: absolute;
-        top: 22px;
-        left: 365px;
-        text-align: center;
-        opacity: 0;
-        width: 85px;
-        height: 85px;
-        letter-spacing: -7px;
-        color: #101012;
-        display: none;
+            left: 792px;
         }
 
         #p2NScore {
-        position: absolute;
-        top: 22px;
-        right: 379px;
-        text-align: center;
-        opacity: 0;
-        width: 85px;
-        height: 85px;
-        letter-spacing: -7px;
-        color: #101012;
-        display: none;
+            right: 795px;
         }
 
         #overlayCasters {
             position: absolute;
             right: 12px;
-            bottom: 45px;
+            top: 250px;
             opacity: 1;
             transform: scale(1.1);
-        }
-
-        #caster1,
-        #caster2 {
-            position: absolute;
-            bottom: 120px;
-            color: black;
+            filter: drop-shadow(0px 0px 5px black);
         }
 
         #caster1 {
-            right: 1355px;
+            position: absolute;
+            bottom: 110px;
         }
 
         #caster2 {
-            left: -752px;
+            position: absolute;
+            bottom: 50px;
         }
 
         .casterTextBox {
             position: absolute;
-            width: 370px;
-            height: 100px;
+            width: 255px;
+            height: 36px;
+            right: 0px;
             text-align: center;
         }
+
         .casterIcon {
-            height: 28px;
+            height: 23px;
             width: 22px;
-            fill: black;
-            transform: scale(1.5);
+            fill: white;
+            transform: translate(3px, 2px);
         }
 
         .casterText {
-            font-family: "Lemon Milk";
-            font-weight: 700;
-            /* background-color: lime; */
-            /* opacity: 0.5; */
+            font-size: 22px;
+            font-family: "Smash";
         }
+
 
         .casterTwitterBox {
             position: absolute;
-            width: 280px;
-            height: 45px;
-            bottom: -75px;
+            width: 255px;
+            height: 36px;
+            bottom: -65px;
             right: 0px;
             text-align: center;
-            /* background-color: skyblue; */
-            /* opacity: 0.5; */
             display: none;
         }
 
         .twitterIcon {
-            height: 30px;
-            width: 30px;
+            height: 20px;
+            width: 20px;
             transform: translateY(3px);
-            fill: black;
+            fill: white;
         }
 
         .casterTwitchBox {
             position: absolute;
-            width: 280px;
-            height: 45px;
-            bottom: -75px;
+            width: 255px;
+            height: 36px;
+            bottom: -65px;
             right: 0px;
             text-align: center;
-            /* background-color: violet; */
-            /* opacity: 0.5; */
             display: none;
         }
 
         .twitchIcon {
-            height: 25px;
-            width: 25px;
-            fill: black;
+            height: 17px;
+            width: 17px;
+            fill: white;
             transform: translateY(2px);
         }
 
         .socialText {
-            font-family: "Lemon Milk";
-            color: black;
-            font-size: 18px !important;
-            background-color: navy;
-            opacity: 0.5;
+            font-size: 18px;
+            font-family: "Smash";
+            color: white;
         }
-
-        #caster1TwitterBox {
-            right: -355px;
-        }
-
-        #caster1TwitchBox {
-            right: -355px;
-        }
-
-        #caster2TwitterBox {
-            right: -290px;
-        }
-
-        #caster2TwitchBox {
-            right: -290px;
-        }   
 
         #introVid {
             position: absolute;
             top: 0px;
         }
-
 
         .pIntro {
             position: absolute;
@@ -468,13 +499,13 @@
 <body>
 
  
-    <img class="absol name-plates" src="Resources/Overlay/Y-Town-Smash-Commentators-Overlay-v1.png">
+    <img class="absol" src="Resources/Overlay/Y-Town Smash-Overlay-v4-Redesign-Wide.png">
 
-    <!-- <div id="logo" class="logo">
+    <div id="logo" class="logo">
 
         <img src="Resources/Overlay/Logo.png" id="logo" class="absol">
 
-    </div> -->
+    </div>
  
 
 
@@ -584,7 +615,11 @@
 
     <div id="overlayRound">
         <span id="round"></span>
-        <span id="bestOf">Best of 5</span>
+    </div>
+
+    <div id="overlayFormat">
+        <span id="bestOf"></span>
+        <span id="format"></span>
     </div>
 
     <div id="overlayCasters">

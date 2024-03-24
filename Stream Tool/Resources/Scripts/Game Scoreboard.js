@@ -184,7 +184,7 @@ async function getData(scInfo) {
 		p1ScorePrev = p1Score;
 
 		//set the color
-		updateColor('p1Color', 'p1Name', p1Color);
+		updateColor('p1Color', null, p1Color);
 		p1ColorPrev = p1Color;
 
 
@@ -206,7 +206,7 @@ async function getData(scInfo) {
 		moveScoresIntro(2, bestOf, p2WL, -sMove);
 		p2ScorePrev = p2Score;
 
-		updateColor('p2Color', 'p2Name', p2Color);
+		updateColor('p2Color', null, p2Color);
 		p2ColorPrev = p2Color;
 
 
@@ -348,7 +348,7 @@ async function getData(scInfo) {
 
 		//change the player's colors
 		if (p1ColorPrev != p1Color) {
-			updateColor('p1Color', 'p1Team', p1Color);
+			//updateColor('p1Color', 'p1Team', p1Color);
 			updateScore(1, p1Score, p1Color);
 			p1ColorPrev = p1Color;
 		}
@@ -400,7 +400,7 @@ async function getData(scInfo) {
 		}
 
 		if (p2ColorPrev != p2Color) {
-			updateColor('p2Color', 'p2Team', p2Color);
+			//updateColor('p2Color', 'p2Team', p2Color);
 			updateScore(2, p2Score, p2Color);
 			p2ColorPrev = p2Color;
 		}
@@ -677,6 +677,7 @@ function updatePlayerName(wrapperID, nameID, teamID, pronID, pName, pTeam, pPron
 	nameEL.textContent = pName; //change the actual text
 	const teamEL = document.getElementById(teamID);
 	teamEL.style.fontSize = '20px';
+	// teamEL.style.fontSize = '30px';
 	teamEL.textContent = pTeam;
 	const pronEL = document.getElementById(pronID);
 	pronEL.style.fontSize = '20px';
