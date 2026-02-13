@@ -23,9 +23,12 @@ if (isElectron) {
 
 let mainPath, charPath;
 
-if (isElectron) {
-    mainPath = path.resolve(baseDir, 'Resources', 'Texts');
-    charPath = path.resolve(baseDir, 'Resources', 'Characters');
+const isDev = process.execPath.includes('node_modules');
+
+if (isDev) {
+    baseDir = path.resolve(__dirname, '..', '..', 'Stream Tool');
+} else if (process.env.PORTABLE_EXECUTABLE_DIR) {
+    baseDir = process.env.PORTABLE_EXECUTABLE_DIR;
 } else {
     mainPath = "/Resources/Texts";
     charPath = "/Resources/Characters";
