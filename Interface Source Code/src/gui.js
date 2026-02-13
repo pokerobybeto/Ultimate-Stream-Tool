@@ -1,9 +1,10 @@
 const isElectron = typeof require !== 'undefined';
-let fs, path, baseDir;
+let fs, path, os, baseDir;
 
 if (isElectron) {
     fs = require('fs');
     path = require('path');
+    os = require('os');
 
     const isDev = process.execPath.includes('node_modules');
     if (isDev) {
@@ -217,6 +218,29 @@ async function init() {
 
     Mousetrap.bind('f1', () => { giveWinP1() });
     Mousetrap.bind('f2', () => { giveWinP2() });
+
+    // display IP addresses if in Electron
+    if (isElectron) {
+        const remoteInfo = document.getElementById('remoteInfo');
+        const ipListDisplay = document.getElementById('ipList');
+        const interfaces = os.networkInterfaces();
+        let addresses = [];
+
+        for (const k in interfaces) {
+            for (const k2 in interfaces[k]) {
+                const address = interfaces[k][k2];
+                // filter for IPv4 and non-internal (not 127.0.0.1)
+                if (address.family === 'IPv4' && !address.internal) {
+                    addresses.push(`http://${address.address}:1111`);
+                }
+            }
+        }
+
+        if (addresses.length > 0) {
+            remoteInfo.style.display = "block";
+            ipListDisplay.innerHTML = addresses.join('<br>');
+        }
+    }
 
     // const numberedScoreOption = document.querySelector("#forceNS");
     // numberedScoreOption.addEventListener("click", () => {

@@ -228,6 +228,11 @@
       <div id="settings">
         <div id="settingsTitle">SETTINGS</div>
         <div id="actualSettings">
+          <div id="remoteInfo" style="padding: 8px; margin: 10px; background: var(--bg1); border-radius: 5px; font-size: 12px; display: none;">
+            <div style="color: var(--selected); font-weight: bold; margin-bottom: 5px;">Remote Control available at:</div>
+            <div id="ipList" style="font-family: monospace; color: var(--text1);"></div>
+          </div>
+
           <div class="settingBox" title="Plays an intro on 'Scoreboard.html' whenever the file loads">
             <input type="checkbox" id="allowIntro" class="settingsCheck" tabindex="-1">
             <label for="allowIntro" class="settingsText">Allow Intro</span>
