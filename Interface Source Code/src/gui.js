@@ -8,11 +8,11 @@ const path = require('path');
 
 let baseDir;
 
-if (process.resourcesPath.includes('out') || !process.env.SHELL) {
-    baseDir = path.resolve(path.dirname(process.execPath), '..', '..', '..'); 
-    baseDir = path.dirname(process.execPath);
-} else {
+const isDev = process.execPath.includes('node_modules');
+if (isDev) {
     baseDir = path.resolve(__dirname, '..', '..', 'Stream Tool');
+} else {
+    baseDir = path.dirname(process.execPath);
 }
 
 const mainPath = path.resolve(baseDir, 'Resources', 'Texts');
