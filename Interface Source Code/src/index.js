@@ -7,18 +7,17 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
 }
 
 const createWindow = () => {
-  // Create the browser window.
+  // 1. Define the base size that looks good on Windows
+  const baseWidth = 890;
+  const baseHeight = 329;
+
+  const isLinux = process.platform === 'linux';
+  const heightAdjustment = isLinux ? 50 : 0; 
+
   const mainWindow = new BrowserWindow({
-
-    width: 890,
-    height: 329,
+    width: baseWidth,
+    height: baseHeight + heightAdjustment,
     resizable: false,
-    
-    minWidth: 890,
-    minHeight: 349,
-    maxWidth: 890,
-    maxHeight: 490,
-
 
     webPreferences: {
       nodeIntegration: true,
@@ -40,6 +39,8 @@ const createWindow = () => {
   // load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
 };
+
+app.commandLine.appendSwitch('ozone-platform-hint', 'auto');
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
