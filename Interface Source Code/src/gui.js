@@ -6,8 +6,19 @@ const path = require('path');
 // const mainPath = path.resolve(__dirname, '..', '..', 'Stream Tool', 'Resources', 'Texts');
 // const charPath = path.resolve(__dirname, '..', '..', 'Stream Tool', 'Resources', 'Characters');
 
-const mainPath = path.resolve(process.env.PORTABLE_EXECUTABLE_DIR, 'Resources', 'Texts');
-const charPath = path.resolve(process.env.PORTABLE_EXECUTABLE_DIR, 'Resources', 'Characters');
+let baseDir;
+
+if (process.resourcesPath.includes('out') || !process.env.SHELL) {
+    baseDir = path.resolve(path.dirname(process.execPath), '..', '..', '..'); 
+    baseDir = path.dirname(process.execPath);
+} else {
+    baseDir = path.resolve(__dirname, '..', '..', 'Stream Tool');
+}
+
+const mainPath = path.resolve(baseDir, 'Resources', 'Texts');
+const charPath = path.resolve(baseDir, 'Resources', 'Characters');
+
+console.log("Looking for data in:", baseDir);
 
 //yes we all like global variables
 let charP1 = "Random";
