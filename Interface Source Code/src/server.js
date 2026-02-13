@@ -38,6 +38,12 @@ app.get(/\/api\/json\/(.*)/, (req, res) => {
     }
 });
 
+let lastUpdateTimestamp = Date.now();
+
+app.get('/api/last-update', (req, res) => {
+    res.json({ timestamp: lastUpdateTimestamp });
+});
+
 // API to update ScoreboardInfo and text files
 app.post('/api/scoreboard', (req, res) => {
     try {
@@ -63,6 +69,8 @@ app.post('/api/scoreboard', (req, res) => {
         fs.writeFileSync(path.join(mainPath, "Simple Texts", "Caster 2 Name.txt"), scoreboardJson.caster2Name || "");
         fs.writeFileSync(path.join(mainPath, "Simple Texts", "Caster 2 Twitter.txt"), scoreboardJson.caster2Twitter || "");
         fs.writeFileSync(path.join(mainPath, "Simple Texts", "Caster 2 Twitch.txt"), scoreboardJson.caster2Twitch || "");
+
+        lastUpdateTimestamp = Date.now();
 
         console.log("Scoreboard updated");
         res.send({ status: 'success' });

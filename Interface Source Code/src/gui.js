@@ -373,40 +373,55 @@ async function loadSavedData() {
     }
 }
 
-async function saveData(data) {
-    if (isElectron) {
-        fs.writeFileSync(path.join(mainPath, "ScoreboardInfo.json"), JSON.stringify(data, null, 2));
+// polling logic
+let localTimestamp = Date.now();
+let isSaving = false;
 
-        const writeTxt = (filename, content) => {
-            fs.writeFileSync(path.join(mainPath, "Simple Texts", filename), content);
-        };
+const API_BASE = isElectron ? 'http://localhost:1111' : '';
 
-        writeTxt("Player 1.txt", data.p1Name || "");
-        writeTxt("Player 2.txt", data.p2Name || "");
-        writeTxt("Score 1.txt", data.p1NScore || "0");
-        writeTxt("Score 2.txt", data.p2NScore || "0");
-        writeTxt("Round.txt", data.round || "");
-        writeTxt("Format.txt", data.format || "");
-        writeTxt("Tournament Name.txt", data.tournamentName || "");
-        writeTxt("Caster 1 Name.txt", data.caster1Name || "");
-        writeTxt("Caster 1 Twitter.txt", data.caster1Twitter || "");
-        writeTxt("Caster 1 Twitch.txt", data.caster1Twitch || "");
-        writeTxt("Caster 2 Name.txt", data.caster2Name || "");
-        writeTxt("Caster 2 Twitter.txt", data.caster2Twitter || "");
-        writeTxt("Caster 2 Twitch.txt", data.caster2Twitch || "");
+async function pollForUpdates() {
+    if (isSaving) return;
 
-    } else {
-        try {
-            await fetch('/api/scoreboard', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-        } catch (error) {
-            console.error("Error saving data:", error);
+    try {
+        const response = await fetch(API_BASE + '/api/last-update');
+        const data = await response.json();
+
+        if (data.timestamp > localTimestamp) {
+            console.log("Remote update detected, reloading...");
+            await loadSavedData();
+            localTimestamp = data.timestamp;
         }
+    } catch (error) {
+        console.error("Polling error:", error);
+    }
+}
+
+setInterval(pollForUpdates, 1000);
+
+
+async function saveData(data) {
+    isSaving = true;
+    try {
+        const response = await fetch(API_BASE + '/api/scoreboard', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            const updateResponse = await fetch(API_BASE + '/api/last-update');
+            const updateData = await updateResponse.json();
+            localTimestamp = updateData.timestamp;
+            console.log("Data saved and timestamp updated");
+        } else {
+            console.error("Error saving data via API");
+        }
+    } catch (error) {
+        console.error("Error saving data:", error);
+    } finally {
+        isSaving = false;
     }
 }
 
