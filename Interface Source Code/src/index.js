@@ -1,6 +1,9 @@
 const { app, globalShortcut, BrowserWindow } = require('electron');
 const path = require('path');
 
+// start the web server
+require('./server');
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
   app.quit();
@@ -12,7 +15,7 @@ const createWindow = () => {
   const baseHeight = 329;
 
   const isLinux = process.platform === 'linux';
-  const adjustment = isLinux ? 50 : 0; 
+  const adjustment = isLinux ? 50 : 0;
 
   const mainWindow = new BrowserWindow({
     width: baseWidth + adjustment,
@@ -34,7 +37,7 @@ const createWindow = () => {
 
 
 
-// mainWindow.setAlwaysOnTop(true);
+  // mainWindow.setAlwaysOnTop(true);
 
   // load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
