@@ -12,11 +12,11 @@ const createWindow = () => {
   const baseHeight = 329;
 
   const isLinux = process.platform === 'linux';
-  const heightAdjustment = isLinux ? 50 : 0; 
+  const adjustment = isLinux ? 50 : 0; 
 
   const mainWindow = new BrowserWindow({
-    width: baseWidth,
-    height: baseHeight + heightAdjustment,
+    width: baseWidth + adjustment,
+    height: baseHeight + adjustment,
     resizable: false,
 
     webPreferences: {
