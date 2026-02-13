@@ -9,8 +9,11 @@ const path = require('path');
 let baseDir;
 
 const isDev = process.execPath.includes('node_modules');
+
 if (isDev) {
     baseDir = path.resolve(__dirname, '..', '..', 'Stream Tool');
+} else if (process.env.PORTABLE_EXECUTABLE_DIR) {
+    baseDir = process.env.PORTABLE_EXECUTABLE_DIR;
 } else {
     baseDir = path.dirname(process.execPath);
 }
