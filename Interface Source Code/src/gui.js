@@ -97,6 +97,7 @@ async function init() {
     await loadColors(1);
     await loadColors(2);
 
+    await loadSavedData();
 
     //set initial values for the character selectors
     if (isElectron) {
@@ -116,9 +117,6 @@ async function init() {
     //if clicking the entirety of the char roster div, hide it
     document.getElementById('charRoster').addEventListener("click", hideChars);
 
-    //update the character image (to random)
-    charImgChange(charImgP1, "Random");
-    charImgChange(charImgP2, "Random");
 
     //check whenever an image isnt found so we replace it with a "?"
     document.getElementById('p1CharImg').addEventListener("error", () => {
@@ -276,6 +274,102 @@ async function getJson(fileName) {
             console.error("Error fetching JSON:", error);
             return undefined;
         }
+    }
+}
+
+async function loadSavedData() {
+    let data = await getJson("ScoreboardInfo");
+    if (data) {
+        // Player 1
+        p1NameInp.value = data.p1Name || p1NameInp.value;
+        p1TagInp.value = data.p1Team || p1TagInp.value;
+        p1PronInp.value = data.p1Pron || p1PronInp.value;
+        p1NScoreInp.value = data.p1NScore || p1NScoreInp.value;
+
+        charP1 = data.p1Character || "Random";
+        skinP1 = data.p1Skin || `${charP1} (1)`;
+        colorP1 = data.p1Color || "Red";
+        currentP1WL = data.p1WL || "Nada";
+
+        // Player 2
+        p2NameInp.value = data.p2Name || p2NameInp.value;
+        p2TagInp.value = data.p2Team || p2TagInp.value;
+        p2PronInp.value = data.p2Pron || p2PronInp.value;
+        p2NScoreInp.value = data.p2NScore || p2NScoreInp.value;
+
+        charP2 = data.p2Character || "Random";
+        skinP2 = data.p2Skin || `${charP2} (1)`;
+        colorP2 = data.p2Color || "Blue";
+        currentP2WL = data.p2WL || "Nada";
+
+        currentBestOf = data.bestOf || "Bo3";
+        roundInp.value = data.round || roundInp.value;
+        formatInp.value = data.format || formatInp.value;
+
+        document.getElementById('tournamentName').value = data.tournamentName || "";
+        document.getElementById('cName1').value = data.caster1Name || "";
+        document.getElementById('cTwitter1').value = data.caster1Twitter || "";
+        document.getElementById('cTwitch1').value = data.caster1Twitch || "";
+        document.getElementById('cName2').value = data.caster2Name || "";
+        document.getElementById('cTwitter2').value = data.caster2Twitter || "";
+        document.getElementById('cTwitch2').value = data.caster2Twitch || "";
+
+        document.getElementById('allowIntro').checked = data.allowIntro || false;
+
+
+        if (isElectron) {
+            document.getElementById('p1CharSelector').setAttribute('src', charPath + '/CSS/' + charP1 + '.png');
+            document.getElementById('p2CharSelector').setAttribute('src', charPath + '/CSS/' + charP2 + '.png');
+        } else {
+            document.getElementById('p1CharSelector').setAttribute('src', charPath + '/CSS/' + charP1 + '.png');
+            document.getElementById('p2CharSelector').setAttribute('src', charPath + '/CSS/' + charP2 + '.png');
+        }
+
+        charImgChange(charImgP1, charP1, skinP1);
+        charImgChange(charImgP2, charP2, skinP2);
+
+        // Colors
+        let interfaceInfo = await getJson("InterfaceInfo");
+        if (interfaceInfo) {
+            for (let i = 0; i < Object.keys(interfaceInfo.colorSlots).length; i++) {
+                if (interfaceInfo.colorSlots["color" + i].name == colorP1) {
+                    document.getElementById("p1ColorRect").style.backgroundColor = interfaceInfo.colorSlots["color" + i].hex;
+                    document.getElementById("player1").style.backgroundImage = "linear-gradient(to bottom left, " + interfaceInfo.colorSlots["color" + i].hex + "50, #00000000, #00000000)";
+                }
+                if (interfaceInfo.colorSlots["color" + i].name == colorP2) {
+                    document.getElementById("p2ColorRect").style.backgroundColor = interfaceInfo.colorSlots["color" + i].hex;
+                    document.getElementById("player2").style.backgroundImage = "linear-gradient(to bottom left, " + interfaceInfo.colorSlots["color" + i].hex + "50, #00000000, #00000000)";
+                }
+            }
+        }
+
+        if (currentP1WL == "W") p1W.click();
+        else if (currentP1WL == "L") p1L.click();
+
+        if (currentP2WL == "W") p2W.click();
+        else if (currentP2WL == "L") p2L.click();
+
+        if (currentBestOf == "Bo5") {
+            if (document.getElementById("bo5Div")) document.getElementById("bo5Div").click();
+        } else {
+            if (document.getElementById("bo3Div")) document.getElementById("bo3Div").click();
+        }
+
+        const resize = (el) => { if (el) resizeInput.call(el); };
+
+        resize(p1NameInp);
+        resize(p1TagInp);
+        resize(p1PronInp);
+        resize(p1NScoreInp);
+        resize(p2NameInp);
+        resize(p2TagInp);
+        resize(p2PronInp);
+        resize(p2NScoreInp);
+        resize(roundInp);
+        resize(formatInp);
+
+        await addSkinIcons(1);
+        await addSkinIcons(2);
     }
 }
 
