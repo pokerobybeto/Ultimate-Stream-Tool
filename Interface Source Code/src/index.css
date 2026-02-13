@@ -696,3 +696,24 @@ input[type="text"] {
   transform: scale(1.2);
   transition: transform 200ms
 }
+
+#remoteUpdatePopup {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--bg3);
+  color: var(--text1);
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: 1px solid var(--selected);
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+  font-family: 'Roboto-Medium';
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 500ms ease-in-out;
+  pointer-events: none;
+}
+
+#remoteUpdatePopup.show {
+  opacity: 1;
+}

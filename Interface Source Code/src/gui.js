@@ -390,6 +390,15 @@ async function pollForUpdates() {
             console.log("Remote update detected, reloading...");
             await loadSavedData();
             localTimestamp = data.timestamp;
+
+            // show notification
+            const popup = document.getElementById('remoteUpdatePopup');
+            if (popup) {
+                popup.classList.add('show');
+                setTimeout(() => {
+                    popup.classList.remove('show');
+                }, 1000);
+            }
         }
     } catch (error) {
         console.error("Polling error:", error);
