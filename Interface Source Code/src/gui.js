@@ -97,8 +97,6 @@ async function init() {
     await loadColors(1);
     await loadColors(2);
 
-    await loadSavedData();
-
     //set initial values for the character selectors
     if (isElectron) {
         document.getElementById('p1CharSelector').setAttribute('src', charPath + '/CSS/Random.png');
@@ -142,6 +140,8 @@ async function init() {
     p2Win2.addEventListener("click", changeScoreTicks2);
     p1Win3.addEventListener("click", changeScoreTicks3);
     p2Win3.addEventListener("click", changeScoreTicks3);
+
+    await loadSavedData();
 
     //set click listeners for the [W] and [L] buttons
     p1W.addEventListener("click", setWLP1);
