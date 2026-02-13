@@ -10,7 +10,17 @@ const port = 1111;
 app.use(cors());
 app.use(bodyParser.json());
 
-const baseDir = path.resolve(__dirname, '..', '..', 'Stream Tool');
+let baseDir;
+
+const isDev = process.execPath.includes('node_modules');
+if (isDev) {
+    baseDir = path.resolve(__dirname, '..', '..', 'Stream Tool');
+} else if (process.env.PORTABLE_EXECUTABLE_DIR) {
+    baseDir = process.env.PORTABLE_EXECUTABLE_DIR;
+} else {
+    baseDir = path.dirname(process.execPath);
+}
+
 const mainPath = path.resolve(baseDir, 'Resources', 'Texts');
 const guiPath = __dirname;
 const resourcesPath = path.resolve(baseDir, 'Resources');
