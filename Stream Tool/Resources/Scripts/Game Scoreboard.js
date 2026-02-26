@@ -348,7 +348,7 @@ async function getData(scInfo) {
 
 		//change the player's colors
 		if (p1ColorPrev != p1Color) {
-			updateColor('p1Color', 'p1Team', p1Color);
+			updateColor('p1Color', 'p1Name', p1Color);
 			updateScore(1, p1Score, p1Color);
 			p1ColorPrev = p1Color;
 		}
@@ -400,7 +400,7 @@ async function getData(scInfo) {
 		}
 
 		if (p2ColorPrev != p2Color) {
-			updateColor('p2Color', 'p2Team', p2Color);
+			updateColor('p2Color', 'p2Name', p2Color);
 			updateScore(2, p2Score, p2Color);
 			p2ColorPrev = p2Color;
 		}
