@@ -1,27 +1,31 @@
 const { app, globalShortcut, BrowserWindow } = require('electron');
 const path = require('path');
 
+// start the web server
+require('./server');
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
   app.quit();
 }
 
 const createWindow = () => {
-  // Create the browser window.
+  // 1. Define the base size that looks good on Windows
+  const baseWidth = 890;
+  const baseHeight = 329;
+
+  const isLinux = process.platform === 'linux';
+  const adjustment = isLinux ? 50 : 0;
+
   const mainWindow = new BrowserWindow({
-
-    width: 890,
-    height: 329,
+    width: baseWidth + adjustment,
+    height: baseHeight + adjustment,
     resizable: false,
-    
-    minWidth: 890,
-    minHeight: 349,
-    maxWidth: 890,
-    maxHeight: 490,
-
 
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
     }
   });
 
@@ -33,11 +37,13 @@ const createWindow = () => {
 
 
 
-// mainWindow.setAlwaysOnTop(true);
+  // mainWindow.setAlwaysOnTop(true);
 
   // load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
 };
+
+app.commandLine.appendSwitch('ozone-platform-hint', 'auto');
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

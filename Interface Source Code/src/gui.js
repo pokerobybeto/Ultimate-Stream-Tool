@@ -1,13 +1,37 @@
+const isElectron = typeof require !== 'undefined';
+let fs, path, os, baseDir;
+
+if (isElectron) {
+    fs = require('fs');
+    path = require('path');
+    os = require('os');
+
+    const isDev = process.execPath.includes('node_modules');
+    if (isDev) {
+        baseDir = path.resolve(__dirname, '..', '..', 'Stream Tool');
+    } else if (process.env.PORTABLE_EXECUTABLE_DIR) {
+        baseDir = process.env.PORTABLE_EXECUTABLE_DIR;
+    } else {
+        baseDir = path.dirname(process.execPath);
+    }
+    console.log("Electron mode. Base Dir:", baseDir);
+} else {
+    // browser mode
+    baseDir = "";
+    console.log("Browser mode.");
+}
+
+let mainPath, charPath;
+
+if (isElectron) {
+    mainPath = path.resolve(baseDir, 'Resources', 'Texts');
+    charPath = path.resolve(baseDir, 'Resources', 'Characters');
+} else {
+    mainPath = "/Resources/Texts";
+    charPath = "/Resources/Characters";
+}
+
 window.onload = init;
-
-const fs = require('fs');
-const path = require('path');
-
-// const mainPath = path.resolve(__dirname, '..', '..', 'Stream Tool', 'Resources', 'Texts');
-// const charPath = path.resolve(__dirname, '..', '..', 'Stream Tool', 'Resources', 'Characters');
-
-const mainPath = path.resolve(process.env.PORTABLE_EXECUTABLE_DIR, 'Resources', 'Texts');
-const charPath = path.resolve(process.env.PORTABLE_EXECUTABLE_DIR, 'Resources', 'Characters');
 
 //yes we all like global variables
 let charP1 = "Random";
@@ -57,7 +81,7 @@ const formatInp = document.getElementById('format');
 const forceWL = document.getElementById('forceWLToggle');
 
 
-function init() {
+async function init() {
 
     //first, add listeners for the bottom bar buttons
     document.getElementById('updateRegion').addEventListener("click", writeScoreboard);
@@ -68,18 +92,23 @@ function init() {
 
     //move the viewport to the center (this is to avoid animation bugs)
     viewport.style.right = "100%";
-    
+
 
     /* OVERLAY */
 
     //load color slot list
-    loadColors(1);
-    loadColors(2);
-
+    await loadColors(1);
+    await loadColors(2);
 
     //set initial values for the character selectors
-    document.getElementById('p1CharSelector').setAttribute('src', charPath + '/CSS/Random.png');
-    document.getElementById('p2CharSelector').setAttribute('src', charPath + '/CSS/Random.png');
+    if (isElectron) {
+        document.getElementById('p1CharSelector').setAttribute('src', charPath + '/CSS/Random.png');
+        document.getElementById('p2CharSelector').setAttribute('src', charPath + '/CSS/Random.png');
+    } else {
+        document.getElementById('p1CharSelector').setAttribute('src', '/Resources/Characters/CSS/Random.png');
+        document.getElementById('p2CharSelector').setAttribute('src', '/Resources/Characters/CSS/Random.png');
+    }
+
     //if clicking them, show the character roster
     document.getElementById('p1CharSelector').addEventListener("click", openChars);
     document.getElementById('p2CharSelector').addEventListener("click", openChars);
@@ -89,16 +118,21 @@ function init() {
     //if clicking the entirety of the char roster div, hide it
     document.getElementById('charRoster').addEventListener("click", hideChars);
 
-    //update the character image (to random)
-    charImgChange(charImgP1, "Random");
-    charImgChange(charImgP2, "Random");
 
     //check whenever an image isnt found so we replace it with a "?"
     document.getElementById('p1CharImg').addEventListener("error", () => {
-        document.getElementById('p1CharImg').setAttribute('src', charPath + '/Renders/Random.png');
+        if (isElectron) {
+            document.getElementById('p1CharImg').setAttribute('src', charPath + '/Renders/Random.png');
+        } else {
+            document.getElementById('p1CharImg').setAttribute('src', '/Resources/Characters/Renders/Random.png');
+        }
     });
     document.getElementById('p2CharImg').addEventListener("error", () => {
-        document.getElementById('p2CharImg').setAttribute('src', charPath + '/Renders/Random.png');
+        if (isElectron) {
+            document.getElementById('p2CharImg').setAttribute('src', charPath + '/Renders/Random.png');
+        } else {
+            document.getElementById('p2CharImg').setAttribute('src', '/Resources/Characters/Renders/Random.png');
+        }
     });
 
 
@@ -109,6 +143,8 @@ function init() {
     p2Win2.addEventListener("click", changeScoreTicks2);
     p1Win3.addEventListener("click", changeScoreTicks3);
     p2Win3.addEventListener("click", changeScoreTicks3);
+
+    await loadSavedData();
 
     //set click listeners for the [W] and [L] buttons
     p1W.addEventListener("click", setWLP1);
@@ -162,13 +198,13 @@ function init() {
 
     /* KEYBOARD SHORTCUTS */
 
-    Mousetrap.bind('enter', () => { 
+    Mousetrap.bind('enter', () => {
         writeScoreboard();
         document.getElementById('botBar').style.backgroundColor = "var(--bg3)";
     }, 'keydown');
     Mousetrap.bind('enter', () => {
         document.getElementById('botBar').style.backgroundColor = "var(--bg5)";
-     }, 'keyup');
+    }, 'keyup');
 
     Mousetrap.bind('esc', () => {
         if (movedSettings) { //if settings are open, close them
@@ -182,6 +218,29 @@ function init() {
 
     Mousetrap.bind('f1', () => { giveWinP1() });
     Mousetrap.bind('f2', () => { giveWinP2() });
+
+    // display IP addresses if in Electron
+    if (isElectron) {
+        const remoteInfo = document.getElementById('remoteInfo');
+        const ipListDisplay = document.getElementById('ipList');
+        const interfaces = os.networkInterfaces();
+        let addresses = [];
+
+        for (const k in interfaces) {
+            for (const k2 in interfaces[k]) {
+                const address = interfaces[k][k2];
+                // filter for IPv4 and non-internal (not 127.0.0.1)
+                if (address.family === 'IPv4' && !address.internal) {
+                    addresses.push(`http://${address.address}:1111`);
+                }
+            }
+        }
+
+        if (addresses.length > 0) {
+            remoteInfo.style.display = "block";
+            ipListDisplay.innerHTML = addresses.join('<br>');
+        }
+    }
 
     // const numberedScoreOption = document.querySelector("#forceNS");
     // numberedScoreOption.addEventListener("click", () => {
@@ -224,19 +283,187 @@ function goBack() {
 
 
 //called whenever we need to read a json file
-function getJson(fileName) {
+async function getJson(fileName) {
+    if (isElectron) {
+        try {
+            let settingsRaw = fs.readFileSync(path.join(mainPath, fileName + ".json"));
+            return JSON.parse(settingsRaw);
+        } catch (error) {
+            return undefined;
+        }
+    } else {
+        try {
+            const response = await fetch('/api/json/' + fileName);
+            if (!response.ok) return undefined;
+            return await response.json();
+        } catch (error) {
+            console.error("Error fetching JSON:", error);
+            return undefined;
+        }
+    }
+}
+
+async function loadSavedData() {
+    let data = await getJson("ScoreboardInfo");
+    if (data) {
+        // Player 1
+        p1NameInp.value = data.p1Name || p1NameInp.value;
+        p1TagInp.value = data.p1Team || p1TagInp.value;
+        p1PronInp.value = data.p1Pron || p1PronInp.value;
+        p1NScoreInp.value = data.p1NScore || p1NScoreInp.value;
+
+        charP1 = data.p1Character || "Random";
+        skinP1 = data.p1Skin || `${charP1} (1)`;
+        colorP1 = data.p1Color || "Red";
+        currentP1WL = data.p1WL || "Nada";
+
+        // Player 2
+        p2NameInp.value = data.p2Name || p2NameInp.value;
+        p2TagInp.value = data.p2Team || p2TagInp.value;
+        p2PronInp.value = data.p2Pron || p2PronInp.value;
+        p2NScoreInp.value = data.p2NScore || p2NScoreInp.value;
+
+        charP2 = data.p2Character || "Random";
+        skinP2 = data.p2Skin || `${charP2} (1)`;
+        colorP2 = data.p2Color || "Blue";
+        currentP2WL = data.p2WL || "Nada";
+
+        currentBestOf = data.bestOf || "Bo3";
+        roundInp.value = data.round || roundInp.value;
+        formatInp.value = data.format || formatInp.value;
+
+        document.getElementById('tournamentName').value = data.tournamentName || "";
+        document.getElementById('cName1').value = data.caster1Name || "";
+        document.getElementById('cTwitter1').value = data.caster1Twitter || "";
+        document.getElementById('cTwitch1').value = data.caster1Twitch || "";
+        document.getElementById('cName2').value = data.caster2Name || "";
+        document.getElementById('cTwitter2').value = data.caster2Twitter || "";
+        document.getElementById('cTwitch2').value = data.caster2Twitch || "";
+
+        document.getElementById('allowIntro').checked = data.allowIntro || false;
+
+
+        if (isElectron) {
+            document.getElementById('p1CharSelector').setAttribute('src', charPath + '/CSS/' + charP1 + '.png');
+            document.getElementById('p2CharSelector').setAttribute('src', charPath + '/CSS/' + charP2 + '.png');
+        } else {
+            document.getElementById('p1CharSelector').setAttribute('src', charPath + '/CSS/' + charP1 + '.png');
+            document.getElementById('p2CharSelector').setAttribute('src', charPath + '/CSS/' + charP2 + '.png');
+        }
+
+        charImgChange(charImgP1, charP1, skinP1);
+        charImgChange(charImgP2, charP2, skinP2);
+
+        // Colors
+        let interfaceInfo = await getJson("InterfaceInfo");
+        if (interfaceInfo) {
+            for (let i = 0; i < Object.keys(interfaceInfo.colorSlots).length; i++) {
+                if (interfaceInfo.colorSlots["color" + i].name == colorP1) {
+                    document.getElementById("p1ColorRect").style.backgroundColor = interfaceInfo.colorSlots["color" + i].hex;
+                    document.getElementById("player1").style.backgroundImage = "linear-gradient(to bottom left, " + interfaceInfo.colorSlots["color" + i].hex + "50, #00000000, #00000000)";
+                }
+                if (interfaceInfo.colorSlots["color" + i].name == colorP2) {
+                    document.getElementById("p2ColorRect").style.backgroundColor = interfaceInfo.colorSlots["color" + i].hex;
+                    document.getElementById("player2").style.backgroundImage = "linear-gradient(to bottom left, " + interfaceInfo.colorSlots["color" + i].hex + "50, #00000000, #00000000)";
+                }
+            }
+        }
+
+        if (currentP1WL == "W") p1W.click();
+        else if (currentP1WL == "L") p1L.click();
+
+        if (currentP2WL == "W") p2W.click();
+        else if (currentP2WL == "L") p2L.click();
+
+        if (currentBestOf == "Bo5") {
+            if (document.getElementById("bo5Div")) document.getElementById("bo5Div").click();
+        } else {
+            if (document.getElementById("bo3Div")) document.getElementById("bo3Div").click();
+        }
+
+        const resize = (el) => { if (el) resizeInput.call(el); };
+
+        resize(p1NameInp);
+        resize(p1TagInp);
+        resize(p1PronInp);
+        resize(p1NScoreInp);
+        resize(p2NameInp);
+        resize(p2TagInp);
+        resize(p2PronInp);
+        resize(p2NScoreInp);
+        resize(roundInp);
+        resize(formatInp);
+
+        await addSkinIcons(1);
+        await addSkinIcons(2);
+    }
+}
+
+// polling logic
+let localTimestamp = Date.now();
+let isSaving = false;
+
+const API_BASE = isElectron ? 'http://localhost:1111' : '';
+
+async function pollForUpdates() {
+    if (isSaving) return;
+
     try {
-        let settingsRaw = fs.readFileSync(mainPath + "/" + fileName + ".json");
-        return JSON.parse(settingsRaw);
+        const response = await fetch(API_BASE + '/api/last-update');
+        const data = await response.json();
+
+        if (data.timestamp > localTimestamp) {
+            console.log("Remote update detected, reloading...");
+            await loadSavedData();
+            localTimestamp = data.timestamp;
+
+            // show notification
+            const popup = document.getElementById('remoteUpdatePopup');
+            if (popup) {
+                popup.classList.add('show');
+                setTimeout(() => {
+                    popup.classList.remove('show');
+                }, 1000);
+            }
+        }
     } catch (error) {
-        return undefined;
+        console.error("Polling error:", error);
+    }
+}
+
+setInterval(pollForUpdates, 1000);
+
+
+async function saveData(data) {
+    isSaving = true;
+    try {
+        const response = await fetch(API_BASE + '/api/scoreboard', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            const updateResponse = await fetch(API_BASE + '/api/last-update');
+            const updateData = await updateResponse.json();
+            localTimestamp = updateData.timestamp;
+            console.log("Data saved and timestamp updated");
+        } else {
+            console.error("Error saving data via API");
+        }
+    } catch (error) {
+        console.error("Error saving data:", error);
+    } finally {
+        isSaving = false;
     }
 }
 
 
 //will load the color list to a color slot combo box
-function loadColors(pNum) {
-    let colorList = getJson("InterfaceInfo"); //check the color list
+async function loadColors(pNum) {
+    let colorList = await getJson("InterfaceInfo"); //check the color list
 
     //for each color found, add them to the color list
     for (let i = 0; i < Object.keys(colorList.colorSlots).length; i++) {
@@ -244,7 +471,7 @@ function loadColors(pNum) {
         //create a new div that will have the color info
         let newDiv = document.createElement('div');
         newDiv.style.display = "flex"; //so everything is in 1 line
-        newDiv.title = "Also known as " + colorList.colorSlots["color"+i].hex;
+        newDiv.title = "Also known as " + colorList.colorSlots["color" + i].hex;
         newDiv.className = "colorEntry";
 
         //if the div gets clicked, update the colors
@@ -252,30 +479,30 @@ function loadColors(pNum) {
 
         //create the color's name
         let newText = document.createElement('div');
-        newText.innerHTML = colorList.colorSlots["color"+i].name;
-        
+        newText.innerHTML = colorList.colorSlots["color" + i].name;
+
         //create the color's rectangle
         let newRect = document.createElement('div');
         newRect.style.width = "13px";
         newRect.style.height = "13px";
         newRect.style.margin = "5px";
-        newRect.style.backgroundColor = colorList.colorSlots["color"+i].hex;
+        newRect.style.backgroundColor = colorList.colorSlots["color" + i].hex;
 
         //add them to the div we created before
         newDiv.appendChild(newRect);
         newDiv.appendChild(newText);
 
         //now add them to the actual interface
-        document.getElementById("dropdownColorP"+pNum).appendChild(newDiv);
+        document.getElementById("dropdownColorP" + pNum).appendChild(newDiv);
     }
 
     //set the initial colors for the interface (the first color for p1, and the second for p2)
     if (pNum == 1) {
-        document.getElementById("player1").style.backgroundImage = "linear-gradient(to bottom left, "+colorList.colorSlots["color"+0].hex+"50, #00000000, #00000000)";
-        document.getElementById("p1ColorRect").style.backgroundColor = colorList.colorSlots["color"+0].hex;
+        document.getElementById("player1").style.backgroundImage = "linear-gradient(to bottom left, " + colorList.colorSlots["color" + 0].hex + "50, #00000000, #00000000)";
+        document.getElementById("p1ColorRect").style.backgroundColor = colorList.colorSlots["color" + 0].hex;
     } else {
-        document.getElementById("player2").style.backgroundImage = "linear-gradient(to bottom left, "+colorList.colorSlots["color"+1].hex+"50, #00000000, #00000000)";
-        document.getElementById("p2ColorRect").style.backgroundColor = colorList.colorSlots["color"+1].hex;
+        document.getElementById("player2").style.backgroundImage = "linear-gradient(to bottom left, " + colorList.colorSlots["color" + 1].hex + "50, #00000000, #00000000)";
+        document.getElementById("p2ColorRect").style.backgroundColor = colorList.colorSlots["color" + 1].hex;
     }
 
     //finally, set initial values for the global color variables
@@ -283,7 +510,7 @@ function loadColors(pNum) {
     colorP2 = "Blue";
 }
 
-function updateColor() {
+async function updateColor() {
 
     let pNum; //you've seen this one enough already, right?
     if (this.parentElement.parentElement == document.getElementById("p1Color")) {
@@ -293,27 +520,27 @@ function updateColor() {
     }
 
     let clickedColor = this.textContent;
-    let colorList = getJson("InterfaceInfo");
+    let colorList = await getJson("InterfaceInfo");
 
     //search for the color we just clicked
     for (let i = 0; i < Object.keys(colorList.colorSlots).length; i++) {
-        if (colorList.colorSlots["color"+i].name == clickedColor) {
+        if (colorList.colorSlots["color" + i].name == clickedColor) {
             let colorRectangle, colorGrad;
 
-            colorRectangle = document.getElementById("p"+pNum+"ColorRect");
-            colorGrad = document.getElementById("player"+pNum);
-            
+            colorRectangle = document.getElementById("p" + pNum + "ColorRect");
+            colorGrad = document.getElementById("player" + pNum);
+
             //change the variable that will be read when clicking the update button
             if (pNum == 1) {
-                colorP1 = colorList.colorSlots["color"+i].name;
+                colorP1 = colorList.colorSlots["color" + i].name;
             } else {
-                colorP2 = colorList.colorSlots["color"+i].name;
+                colorP2 = colorList.colorSlots["color" + i].name;
             }
 
             //then change both the color rectangle and the background gradient
-            colorRectangle.style.backgroundColor = colorList.colorSlots["color"+i].hex;
-            colorGrad.style.backgroundImage = "linear-gradient(to bottom left, "+colorList.colorSlots["color"+i].hex+"50, #00000000, #00000000)";
-        
+            colorRectangle.style.backgroundColor = colorList.colorSlots["color" + i].hex;
+            colorGrad.style.backgroundImage = "linear-gradient(to bottom left, " + colorList.colorSlots["color" + i].hex + "50, #00000000, #00000000)";
+
             //also, if random is up, change its color
             if (pNum == 1) {
                 if (charP1 == "Random") {
@@ -343,15 +570,15 @@ function charImgChange(charImg, charName, skinName = `${charName} (1)`) {
 }
 
 
-function createCharRoster() {
+async function createCharRoster() {
     //checks the character list which we use to order stuff
-    const guiSettings = getJson("InterfaceInfo");
+    const guiSettings = await getJson("InterfaceInfo");
 
     //first row
     for (let i = 0; i < 13; i++) {
         let newImg = document.createElement('img');
         newImg.className = "charInRoster";
-        newImg.setAttribute('src', charPath + '/CSS/'+guiSettings.charactersBase[i]+'.png');
+        newImg.setAttribute('src', charPath + '/CSS/' + guiSettings.charactersBase[i] + '.png');
 
         newImg.id = guiSettings.charactersBase[i]; //we will read this value later
         newImg.addEventListener("click", changeCharacter);
@@ -366,7 +593,7 @@ function createCharRoster() {
         newImg.id = guiSettings.charactersBase[i];
         newImg.addEventListener("click", changeCharacter);
 
-        newImg.setAttribute('src', charPath + '/CSS/'+guiSettings.charactersBase[i]+'.png');
+        newImg.setAttribute('src', charPath + '/CSS/' + guiSettings.charactersBase[i] + '.png');
         document.getElementById("rosterLine2").appendChild(newImg);
     }
     //third row
@@ -377,10 +604,10 @@ function createCharRoster() {
         newImg.id = guiSettings.charactersBase[i];
         newImg.addEventListener("click", changeCharacter);
 
-        newImg.setAttribute('src', charPath + '/CSS/'+guiSettings.charactersBase[i]+'.png');
+        newImg.setAttribute('src', charPath + '/CSS/' + guiSettings.charactersBase[i] + '.png');
         document.getElementById("rosterLine3").appendChild(newImg);
     }
-	//fourth row
+    //fourth row
     for (let i = 39; i < 52; i++) {
         let newImg = document.createElement('img');
         newImg.className = "charInRoster";
@@ -388,10 +615,10 @@ function createCharRoster() {
         newImg.id = guiSettings.charactersBase[i];
         newImg.addEventListener("click", changeCharacter);
 
-        newImg.setAttribute('src', charPath + '/CSS/'+guiSettings.charactersBase[i]+'.png');
+        newImg.setAttribute('src', charPath + '/CSS/' + guiSettings.charactersBase[i] + '.png');
         document.getElementById("rosterLine4").appendChild(newImg);
     }
-	//fifth row
+    //fifth row
     for (let i = 52; i < 65; i++) {
         let newImg = document.createElement('img');
         newImg.className = "charInRoster";
@@ -399,10 +626,10 @@ function createCharRoster() {
         newImg.id = guiSettings.charactersBase[i];
         newImg.addEventListener("click", changeCharacter);
 
-        newImg.setAttribute('src', charPath + '/CSS/'+guiSettings.charactersBase[i]+'.png');
+        newImg.setAttribute('src', charPath + '/CSS/' + guiSettings.charactersBase[i] + '.png');
         document.getElementById("rosterLine5").appendChild(newImg);
     }
-	//sixth row
+    //sixth row
     for (let i = 65; i < 78; i++) {
         let newImg = document.createElement('img');
         newImg.className = "charInRoster";
@@ -410,10 +637,10 @@ function createCharRoster() {
         newImg.id = guiSettings.charactersBase[i];
         newImg.addEventListener("click", changeCharacter);
 
-        newImg.setAttribute('src', charPath + '/CSS/'+guiSettings.charactersBase[i]+'.png');
+        newImg.setAttribute('src', charPath + '/CSS/' + guiSettings.charactersBase[i] + '.png');
         document.getElementById("rosterLine6").appendChild(newImg);
     }
-	//seventh row
+    //seventh row
     for (let i = 78; i < 87; i++) {
         let newImg = document.createElement('img');
         newImg.className = "charInRoster";
@@ -421,7 +648,7 @@ function createCharRoster() {
         newImg.id = guiSettings.charactersBase[i];
         newImg.addEventListener("click", changeCharacter);
 
-        newImg.setAttribute('src', charPath + '/CSS/'+guiSettings.charactersBase[i]+'.png');
+        newImg.setAttribute('src', charPath + '/CSS/' + guiSettings.charactersBase[i] + '.png');
         document.getElementById("rosterLine7").appendChild(newImg);
     }
 }
@@ -434,7 +661,7 @@ function openChars() {
     }
 
     document.getElementById('charRoster').style.display = "flex"; //show the thing
-    setTimeout( () => { //right after, change opacity and scale
+    setTimeout(() => { //right after, change opacity and scale
         document.getElementById('charRoster').style.opacity = 1;
         document.getElementById('charRoster').style.transform = "scale(1)";
     }, 0);
@@ -453,20 +680,20 @@ function changeCharacter() {
     if (charP1Active) {
         charP1 = this.id;
         skinP1 = `${charP1} (1)`;
-        document.getElementById('p1CharSelector').setAttribute('src', charPath + '/CSS/'+charP1+'.png');
+        document.getElementById('p1CharSelector').setAttribute('src', charPath + '/CSS/' + charP1 + '.png');
         charImgChange(charImgP1, charP1);
         addSkinIcons(1);
     } else {
         charP2 = this.id;
         skinP2 = `${charP2} (1)`;
-        document.getElementById('p2CharSelector').setAttribute('src', charPath + '/CSS/'+charP2+'.png');
+        document.getElementById('p2CharSelector').setAttribute('src', charPath + '/CSS/' + charP2 + '.png');
         charImgChange(charImgP2, charP2);
         addSkinIcons(2);
     }
 }
 //same as above but for the swap button
 function changeCharacterManual(char, pNum) {
-    document.getElementById('p'+pNum+'CharSelector').setAttribute('src', charPath + '/CSS/'+char+'.png');
+    document.getElementById('p' + pNum + 'CharSelector').setAttribute('src', charPath + '/CSS/' + char + '.png');
     if (pNum == 1) {
         charP1 = char;
         skinP1 = `${charP1} (1)`;
@@ -480,13 +707,13 @@ function changeCharacterManual(char, pNum) {
     }
 }
 //also called when we click those images
-function addSkinIcons(pNum) {
-    document.getElementById('skinListP'+pNum).innerHTML = ''; //clear everything before adding
+async function addSkinIcons(pNum) {
+    document.getElementById('skinListP' + pNum).innerHTML = ''; //clear everything before adding
     let charInfo;
     if (pNum == 1) { //ahh the classic 'which character am i' check
-        charInfo = getJson("Character Info/" + charP1);
+        charInfo = await getJson("Character Info/" + charP1);
     } else {
-        charInfo = getJson("Character Info/" + charP2);
+        charInfo = await getJson("Character Info/" + charP2);
     }
 
 
@@ -499,23 +726,23 @@ function addSkinIcons(pNum) {
             newImg.title = charInfo.skinList[i];
 
             if (pNum == 1) {
-                newImg.setAttribute('src', charPath + '/Stock Icons/'+charP1+'/'+charInfo.skinList[i]+'.png');
+                newImg.setAttribute('src', charPath + '/Stock Icons/' + charP1 + '/' + charInfo.skinList[i] + '.png');
                 newImg.addEventListener("click", changeSkinP1);
             } else {
-                newImg.setAttribute('src', charPath + '/Stock Icons/'+charP2+'/'+charInfo.skinList[i]+'.png');
+                newImg.setAttribute('src', charPath + '/Stock Icons/' + charP2 + '/' + charInfo.skinList[i] + '.png');
                 newImg.addEventListener("click", changeSkinP2);
             }
 
-            document.getElementById('skinListP'+pNum).appendChild(newImg);
+            document.getElementById('skinListP' + pNum).appendChild(newImg);
         }
-       
+
     }
 
     //if the list only has 1 skin or none, hide the skin list
-    if (document.getElementById('skinListP'+pNum).children.length <= 1) {
-        document.getElementById('skinSelectorP'+pNum).style.opacity = 1;
+    if (document.getElementById('skinListP' + pNum).children.length <= 1) {
+        document.getElementById('skinSelectorP' + pNum).style.opacity = 1;
     } else {
-        document.getElementById('skinSelectorP'+pNum).style.opacity = 1;
+        document.getElementById('skinSelectorP' + pNum).style.opacity = 1;
     }
 }
 //whenever clicking on the skin images
@@ -537,8 +764,8 @@ function changeScoreTicks1() {
     }
 
     //deactivate wins 2 and 3
-    document.getElementById('winP'+pNum+'-2').checked = false;
-    document.getElementById('winP'+pNum+'-3').checked = false;
+    document.getElementById('winP' + pNum + '-2').checked = false;
+    document.getElementById('winP' + pNum + '-3').checked = false;
 }
 //whenever clicking on the second score tick
 function changeScoreTicks2() {
@@ -548,8 +775,8 @@ function changeScoreTicks2() {
     }
 
     //deactivate wins 2 and 3
-    document.getElementById('winP'+pNum+'-1').checked = true;
-    document.getElementById('winP'+pNum+'-3').checked = false;
+    document.getElementById('winP' + pNum + '-1').checked = true;
+    document.getElementById('winP' + pNum + '-3').checked = false;
 }
 //something something the third score tick
 function changeScoreTicks3() {
@@ -559,8 +786,8 @@ function changeScoreTicks3() {
     }
 
     //deactivate wins 2 and 3
-    document.getElementById('winP'+pNum+'-1').checked = true;
-    document.getElementById('winP'+pNum+'-2').checked = true;
+    document.getElementById('winP' + pNum + '-1').checked = true;
+    document.getElementById('winP' + pNum + '-2').checked = true;
 }
 
 // const checkNScore = (scoreInp, tick1, tick2, tick3) => {
@@ -591,11 +818,11 @@ function checkScore(tick1, tick2, tick3) {
 
 //gives a victory to player 1 
 function giveWinP1() {
-p1NScoreInp.value = Number(p1NScoreInp.value) + 1;
+    p1NScoreInp.value = Number(p1NScoreInp.value) + 1;
 }
 //same with P2
 function giveWinP2() {
-p2NScoreInp.value = Number(p2NScoreInp.value) + 1;
+    p2NScoreInp.value = Number(p2NScoreInp.value) + 1;
 }
 
 
@@ -652,7 +879,7 @@ function changeInputWidth(input) {
     input.style.width = getTextWidth(input.value,
         window.getComputedStyle(input).fontSize + " " +
         window.getComputedStyle(input).fontFamily
-        ) + 12 + "px";
+    ) + 12 + "px";
 }
 
 
@@ -738,7 +965,7 @@ function swap() {
     let tempP1Char = charP1;
     let tempP2Char = charP2;
     let tempP1Skin = skinP1;
-    let tempP2Skin = skinP2; 
+    let tempP2Skin = skinP2;
 
     changeCharacterManual(tempP2Char, 1);
     changeCharacterManual(tempP1Char, 2);
@@ -774,7 +1001,7 @@ function clearPlayers() {
     changeInputWidth(p2NameInp);
     changeInputWidth(p2PronInp);
     changeInputWidth(p2NScoreInp);
-   
+
 
     //reset characters to random
     document.getElementById('p1CharSelector').setAttribute('src', charPath + '/CSS/Random.png');
@@ -819,16 +1046,16 @@ function setScore(score, tick1, tick2, tick3) {
 function forceWLtoggles() {
     const wlButtons = document.getElementsByClassName("wlButtons");
 
-        if (forceWL.checked) {
-            for (let i = 0; i < wlButtons.length; i++) {
-                wlButtons[i].style.display = "inline";
-            }
-        } else {
-            for (let i = 0; i < wlButtons.length; i++) {
-                wlButtons[i].style.display = "none";
-                deactivateWL();
-            }
+    if (forceWL.checked) {
+        for (let i = 0; i < wlButtons.length; i++) {
+            wlButtons[i].style.display = "inline";
         }
+    } else {
+        for (let i = 0; i < wlButtons.length; i++) {
+            wlButtons[i].style.display = "none";
+            deactivateWL();
+        }
+    }
 }
 
 function copyMatch() {
@@ -839,21 +1066,21 @@ function copyMatch() {
     if (p1TagInp.value) {
         copiedText += p1TagInp.value + " | ";
     }
-    copiedText += p1NameInp.value + " (" + charP1 +") Vs. ";
+    copiedText += p1NameInp.value + " (" + charP1 + ") Vs. ";
     if (p2TagInp.value) {
         copiedText += p2TagInp.value + " | ";
     }
-    copiedText += p2NameInp.value + " (" + charP2 +")";
-// } else {
-//     if(tNameInps[0] == "" && tNameInps == ""){
-//         copiedText += 
-//     }
-//     copiedText += tNameInps[0].value + " Vs " + tNameInps[1].value;
-// }
-// copiedText += " - " + roundInp.value + " - " + document.getElementById('tournamentName').value;
+    copiedText += p2NameInp.value + " (" + charP2 + ")";
+    // } else {
+    //     if(tNameInps[0] == "" && tNameInps == ""){
+    //         copiedText += 
+    //     }
+    //     copiedText += tNameInps[0].value + " Vs " + tNameInps[1].value;
+    // }
+    // copiedText += " - " + roundInp.value + " - " + document.getElementById('tournamentName').value;
 
-//send the string to the user's clipboard
-navigator.clipboard.writeText(copiedText);
+    //send the string to the user's clipboard
+    navigator.clipboard.writeText(copiedText);
 }
 
 
@@ -865,7 +1092,7 @@ navigator.clipboard.writeText(copiedText);
 
 
 //time to write it down
-function writeScoreboard() {
+async function writeScoreboard() {
 
     let scoreboardJson = {
         p1Name: p1NameInp.value,
@@ -898,27 +1125,5 @@ function writeScoreboard() {
         // alwaysOnTop: document.getElementById('alwaysOnTop').checked,
     };
 
-    let data = JSON.stringify(scoreboardJson, null, 2);
-    fs.writeFileSync(mainPath + "/ScoreboardInfo.json", data);
-
-
-    //simple .txt files
-    fs.writeFileSync(mainPath + "/Simple Texts/Player 1.txt", p1NameInp.value);
-    fs.writeFileSync(mainPath + "/Simple Texts/Player 2.txt", p2NameInp.value);
-
-    fs.writeFileSync(mainPath + "/Simple Texts/Score 1.txt", p1NScoreInp.value);
-    fs.writeFileSync(mainPath + "/Simple Texts/Score 2.txt", p2NScoreInp.value);
-
-    fs.writeFileSync(mainPath + "/Simple Texts/Round.txt", roundInp.value);
-    fs.writeFileSync(mainPath + "/Simple Texts/Format.txt", formatInp.value);
-    fs.writeFileSync(mainPath + "/Simple Texts/Tournament Name.txt", document.getElementById('tournamentName').value);
-
-    fs.writeFileSync(mainPath + "/Simple Texts/Caster 1 Name.txt", document.getElementById('cName1').value);
-    fs.writeFileSync(mainPath + "/Simple Texts/Caster 1 Twitter.txt", document.getElementById('cTwitter1').value);
-    fs.writeFileSync(mainPath + "/Simple Texts/Caster 1 Twitch.txt", document.getElementById('cTwitch1').value);
-
-    fs.writeFileSync(mainPath + "/Simple Texts/Caster 2 Name.txt", document.getElementById('cName2').value);
-    fs.writeFileSync(mainPath + "/Simple Texts/Caster 2 Twitter.txt", document.getElementById('cTwitter2').value);
-    fs.writeFileSync(mainPath + "/Simple Texts/Caster 2 Twitch.txt", document.getElementById('cTwitch2').value);
-
+    await saveData(scoreboardJson);
 }
