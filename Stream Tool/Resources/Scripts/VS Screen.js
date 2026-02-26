@@ -1,4 +1,8 @@
 
+String.prototype.toProperCase = function () {
+    return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+};
+
 //animation stuff
 const pCharMove = 30; //distance to move for the character images
 
@@ -106,8 +110,8 @@ function getData(scInfo) {
 
 
 		//set the colors
-		updateColor('p1Slot', p1Color);
-		updateColor('p2Slot', p2Color);
+		updateColor('p1Slot', "p1Series", p1Color, "p1Number", "left");
+		updateColor('p2Slot', "p2Series", p2Color, "p2Number", "right");
 		p1ColorPrev = p1Color;
 		p2ColorPrev = p2Color;
 
@@ -240,7 +244,7 @@ function getData(scInfo) {
 		//color change
 		if (p1ColorPrev != p1Color) {
 			fadeOut('#p1Slot', () => {
-				updateColor('p1Slot', p1Color);
+				updateColor('p1Slot', "p1Series", p1Color, "p1Number", "left");
 				fadeIn('#p1Slot');
 			});
 			p1ColorPrev = p1Color;
@@ -248,7 +252,7 @@ function getData(scInfo) {
 
 		if (p2ColorPrev != p2Color) {
 			fadeOut('#p2Slot', () => {
-				updateColor('p2Slot', p2Color);
+				updateColor('p2Slot', "p2Series", p2Color, "p2Number", "right");
 				fadeIn('#p2Slot');
 			});
 			p2ColorPrev = p2Color;
@@ -317,32 +321,26 @@ function showNothing(itemEL) {
 }
 
 //color change
-function updateColor(pSlotID, color) {
+function updateColor(pSlotID, pSeriesId, color, pNumId, side) {
 	const pSlotEL = document.getElementById(pSlotID);
 	pSlotEL.style.color = getHexColor(color);
 
-	switch (color) {
-		case "Red":
-			return "#fd3232";
-		case "Blue":
-			return "#2985f5";
-		case "Yellow":
-			return "#febc0d";	
-		case "Green":
-			return "#21b546";
-		case "Orange":
-			return "#f88632";	
-		case "Cyan":
-			return "#26cae2";
-		case "Pink":
-			return "#fe9bb5";
-		case "Purple":
-			return "#9570fe";
-		case "CPU":
-			return "#ACACAC";
-		case "Amiibo":
-			return "#87FFCD";
-	}
+	updateBackgroundColor(pNumId, pSeriesId, color, side);
+}
+//background color change
+function updateBackgroundColor(pSlotID, pSeriesId, color, side) {
+
+	//background
+	const backgroundEL = document.getElementById(`background-${side}`);
+	backgroundEL.style.backgroundImage = `url("Resources/Overlay/VS Screen/Backgrounds/${color.toProperCase()}${side.toProperCase()}.png")`
+
+	//player series
+	const pSeriesEL = document.getElementById(pSeriesId);
+	pSeriesEL.style.backgroundColor = getHexColor(color);
+	
+	//player number
+	const pSlotEL = document.getElementById(pSlotID);
+	pSlotEL.style.backgroundColor = getHexColor(color);
 }
 //color codes here!
 function getHexColor(color) {
