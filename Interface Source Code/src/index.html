@@ -2,8 +2,12 @@
 <html>
   <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ultimate Stream Tool</title>
     <link rel="stylesheet" href="index.css">
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>if (window.module) module = window.module;</script>
     <script src="gui.js" defer></script>
     <script src="mousetrap.min.js" defer></script>
   </head>
@@ -226,11 +230,23 @@
       </div>
 
       <div id="settings">
-        <div id="settingsTitle">SETTINGS</div>
+        <div id="settingsTitle">
+          <div id="closeSettings">
+            <svg viewBox="0 0 24 24">
+              <path fill="currentColor" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
+            </svg>
+          </div>
+          SETTINGS
+        </div>
         <div id="actualSettings">
           <div id="remoteInfo" style="padding: 8px; margin: 10px; background: var(--bg1); border-radius: 5px; font-size: 12px; display: none;">
-            <div style="color: var(--selected); font-weight: bold; margin-bottom: 5px;">Remote Control available at:</div>
-            <div id="ipList" style="font-family: monospace; color: var(--text1);"></div>
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <div>
+                <div style="color: var(--selected); font-weight: bold; margin-bottom: 5px;">Remote Control available at:</div>
+                <div id="ipList" style="font-family: monospace; color: var(--text1);"></div>
+              </div>
+              <div id="qrcode" style="background-color: white; padding: 5px; border-radius: 4px; margin-left: 10px;"></div>
+            </div>
           </div>
 
           <div class="settingBox" title="Plays an intro on 'Scoreboard.html' whenever the file loads">
@@ -260,27 +276,10 @@ They will always appear when typing 'Grand' on the round box.">
       </div>
 
       <div id="charRoster">
-        <div class="rosterLine" id="rosterLine1">
-          
+        <div id="searchContainer">
+          <input type="text" id="charSearchInput" placeholder="Search..." autocomplete="off">
         </div>
-        <div class="rosterLine" id="rosterLine2">
-
-        </div>
-        <div class="rosterLine" id="rosterLine3">
-
-        </div>
-		    <div class="rosterLine" id="rosterLine4">
-
-        </div>
-		    <div class="rosterLine" id="rosterLine5">
-
-        </div>
-		    <div class="rosterLine" id="rosterLine6">
-
-        </div>
-		    <div class="rosterLine" id="rosterLine7">
-
-        </div>
+        <div id="charGrid"></div>
       </div>
 
       <div id="goBack"></div>

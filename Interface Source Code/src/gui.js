@@ -86,6 +86,7 @@ async function init() {
     //first, add listeners for the bottom bar buttons
     document.getElementById('updateRegion').addEventListener("click", writeScoreboard);
     document.getElementById('settingsRegion').addEventListener("click", moveViewport);
+    document.getElementById('closeSettings').addEventListener("click", goBack);
 
     //if the viewport is moved, click anywhere on the center to go back
     document.getElementById('goBack').addEventListener("click", goBack);
@@ -118,6 +119,14 @@ async function init() {
     //if clicking the entirety of the char roster div, hide it
     document.getElementById('charRoster').addEventListener("click", hideChars);
 
+    const searchInput = document.getElementById('charSearchInput');
+    searchInput.addEventListener("click", (e) => e.stopPropagation());
+    searchInput.addEventListener("input", filterChars);
+    searchInput.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+            hideChars();
+        }
+    });
 
     //check whenever an image isnt found so we replace it with a "?"
     document.getElementById('p1CharImg').addEventListener("error", () => {
@@ -239,6 +248,18 @@ async function init() {
         if (addresses.length > 0) {
             remoteInfo.style.display = "block";
             ipListDisplay.innerHTML = addresses.join('<br>');
+
+            // Generate QR Code
+            const qrContainer = document.getElementById("qrcode");
+            qrContainer.innerHTML = "";
+            new QRCode(qrContainer, {
+                text: addresses[0],
+                width: 64,
+                height: 64,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.L
+            });
         }
     }
 
@@ -267,7 +288,11 @@ async function init() {
 
 function moveViewport() {
     if (!movedSettings) {
-        viewport.style.right = "140%";
+        if (window.innerWidth <= 850) {
+            viewport.style.right = "200%";
+        } else {
+            viewport.style.right = "140%";
+        }
         document.getElementById('overlay').style.opacity = "25%";
         document.getElementById('goBack').style.display = "block"
         movedSettings = true;
@@ -391,8 +416,6 @@ async function loadSavedData() {
         resize(p2TagInp);
         resize(p2PronInp);
         resize(p2NScoreInp);
-        resize(roundInp);
-        resize(formatInp);
 
         await addSkinIcons(1);
         await addSkinIcons(2);
@@ -574,8 +597,9 @@ async function createCharRoster() {
     //checks the character list which we use to order stuff
     const guiSettings = await getJson("InterfaceInfo");
 
-    //first row
-    for (let i = 0; i < 13; i++) {
+    const charGrid = document.getElementById("charGrid");
+
+    for (let i = 0; i < guiSettings.charactersBase.length; i++) {
         let newImg = document.createElement('img');
         newImg.className = "charInRoster";
         newImg.setAttribute('src', charPath + '/CSS/' + guiSettings.charactersBase[i] + '.png');
@@ -583,73 +607,7 @@ async function createCharRoster() {
         newImg.id = guiSettings.charactersBase[i]; //we will read this value later
         newImg.addEventListener("click", changeCharacter);
 
-        document.getElementById("rosterLine1").appendChild(newImg);
-    }
-    //second row
-    for (let i = 13; i < 26; i++) {
-        let newImg = document.createElement('img');
-        newImg.className = "charInRoster";
-
-        newImg.id = guiSettings.charactersBase[i];
-        newImg.addEventListener("click", changeCharacter);
-
-        newImg.setAttribute('src', charPath + '/CSS/' + guiSettings.charactersBase[i] + '.png');
-        document.getElementById("rosterLine2").appendChild(newImg);
-    }
-    //third row
-    for (let i = 26; i < 39; i++) {
-        let newImg = document.createElement('img');
-        newImg.className = "charInRoster";
-
-        newImg.id = guiSettings.charactersBase[i];
-        newImg.addEventListener("click", changeCharacter);
-
-        newImg.setAttribute('src', charPath + '/CSS/' + guiSettings.charactersBase[i] + '.png');
-        document.getElementById("rosterLine3").appendChild(newImg);
-    }
-    //fourth row
-    for (let i = 39; i < 52; i++) {
-        let newImg = document.createElement('img');
-        newImg.className = "charInRoster";
-
-        newImg.id = guiSettings.charactersBase[i];
-        newImg.addEventListener("click", changeCharacter);
-
-        newImg.setAttribute('src', charPath + '/CSS/' + guiSettings.charactersBase[i] + '.png');
-        document.getElementById("rosterLine4").appendChild(newImg);
-    }
-    //fifth row
-    for (let i = 52; i < 65; i++) {
-        let newImg = document.createElement('img');
-        newImg.className = "charInRoster";
-
-        newImg.id = guiSettings.charactersBase[i];
-        newImg.addEventListener("click", changeCharacter);
-
-        newImg.setAttribute('src', charPath + '/CSS/' + guiSettings.charactersBase[i] + '.png');
-        document.getElementById("rosterLine5").appendChild(newImg);
-    }
-    //sixth row
-    for (let i = 65; i < 78; i++) {
-        let newImg = document.createElement('img');
-        newImg.className = "charInRoster";
-
-        newImg.id = guiSettings.charactersBase[i];
-        newImg.addEventListener("click", changeCharacter);
-
-        newImg.setAttribute('src', charPath + '/CSS/' + guiSettings.charactersBase[i] + '.png');
-        document.getElementById("rosterLine6").appendChild(newImg);
-    }
-    //seventh row
-    for (let i = 78; i < 87; i++) {
-        let newImg = document.createElement('img');
-        newImg.className = "charInRoster";
-
-        newImg.id = guiSettings.charactersBase[i];
-        newImg.addEventListener("click", changeCharacter);
-
-        newImg.setAttribute('src', charPath + '/CSS/' + guiSettings.charactersBase[i] + '.png');
-        document.getElementById("rosterLine7").appendChild(newImg);
+        charGrid.appendChild(newImg);
     }
 }
 
@@ -660,10 +618,16 @@ function openChars() {
         charP1Active = true;
     }
 
+    // Reset search
+    const searchInput = document.getElementById('charSearchInput');
+    searchInput.value = "";
+    filterChars.call(searchInput);
+
     document.getElementById('charRoster').style.display = "flex"; //show the thing
     setTimeout(() => { //right after, change opacity and scale
         document.getElementById('charRoster').style.opacity = 1;
         document.getElementById('charRoster').style.transform = "scale(1)";
+        searchInput.focus();
     }, 0);
 }
 //to hide the character grid
@@ -673,6 +637,18 @@ function hideChars() {
     setTimeout(() => {
         document.getElementById('charRoster').style.display = "none";
     }, 200);
+}
+
+function filterChars() {
+    const filter = this.value.toUpperCase();
+    const images = document.getElementsByClassName("charInRoster");
+    for (let i = 0; i < images.length; i++) {
+        if (images[i].id.toUpperCase().indexOf(filter) > -1) {
+            images[i].style.display = "";
+        } else {
+            images[i].style.display = "none";
+        }
+    }
 }
 
 //called whenever clicking an image in the character roster
@@ -740,7 +716,7 @@ async function addSkinIcons(pNum) {
 
     //if the list only has 1 skin or none, hide the skin list
     if (document.getElementById('skinListP' + pNum).children.length <= 1) {
-        document.getElementById('skinSelectorP' + pNum).style.opacity = 1;
+        document.getElementById('skinSelectorP' + pNum).style.opacity = 0;
     } else {
         document.getElementById('skinSelectorP' + pNum).style.opacity = 1;
     }
@@ -859,9 +835,8 @@ function setWLP2() {
 function deactivateWL() {
     currentP1WL = "Nada";
     currentP2WL = "Nada";
-    document.getElementById;
 
-    pWLs = document.getElementsByClassName("wlBox");
+    const pWLs = document.getElementsByClassName("wlBox");
     for (let i = 0; i < pWLs.length; i++) {
         pWLs[i].style.color = "var(--text2)";
         pWLs[i].style.backgroundImage = "var(--bg4)";
@@ -976,8 +951,8 @@ function swap() {
     skinP2 = tempP1Skin;
 
 
-    tempP1Score = checkScore(p1Win1, p1Win2, p1Win3);
-    tempP2Score = checkScore(p2Win1, p2Win2, p2Win3);
+    let tempP1Score = checkScore(p1Win1, p1Win2, p1Win3);
+    let tempP2Score = checkScore(p2Win1, p2Win2, p2Win3);
     setScore(tempP2Score, p1Win1, p1Win2, p1Win3);
     setScore(tempP1Score, p2Win1, p2Win2, p2Win3);
 }

@@ -12,7 +12,7 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
 const createWindow = () => {
   // 1. Define the base size that looks good on Windows
   const baseWidth = 890;
-  const baseHeight = 329;
+  const baseHeight = 340;
 
   const isLinux = process.platform === 'linux';
   const adjustment = isLinux ? 50 : 0;

@@ -1,7 +1,7 @@
 {
   "name": "ultimae-st-gui",
   "productName": "Ultimate ST",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "An electron interface for Ultimate tournament streams.",
   "main": "src/index.js",
   "scripts": {
