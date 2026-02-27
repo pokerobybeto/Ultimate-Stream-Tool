@@ -131,16 +131,16 @@ async function init() {
     //check whenever an image isnt found so we replace it with a "?"
     document.getElementById('p1CharImg').addEventListener("error", () => {
         if (isElectron) {
-            document.getElementById('p1CharImg').setAttribute('src', charPath + '/Renders/Random.png');
+            document.getElementById('p1CharImg').setAttribute('src', charPath + '/Renders/Random.webp');
         } else {
-            document.getElementById('p1CharImg').setAttribute('src', '/Resources/Characters/Renders/Random.png');
+            document.getElementById('p1CharImg').setAttribute('src', '/Resources/Characters/Renders/Random.webp');
         }
     });
     document.getElementById('p2CharImg').addEventListener("error", () => {
         if (isElectron) {
-            document.getElementById('p2CharImg').setAttribute('src', charPath + '/Renders/Random.png');
+            document.getElementById('p2CharImg').setAttribute('src', charPath + '/Renders/Random.webp');
         } else {
-            document.getElementById('p2CharImg').setAttribute('src', '/Resources/Characters/Renders/Random.png');
+            document.getElementById('p2CharImg').setAttribute('src', '/Resources/Characters/Renders/Random.webp');
         }
     });
 
@@ -338,7 +338,7 @@ async function loadSavedData() {
         p1NScoreInp.value = data.p1NScore || p1NScoreInp.value;
 
         charP1 = data.p1Character || "Random";
-        skinP1 = data.p1Skin || `${charP1} (1)`;
+        skinP1 = data.p1Skin || `1`;
         colorP1 = data.p1Color || "Red";
         currentP1WL = data.p1WL || "Nada";
 
@@ -349,7 +349,7 @@ async function loadSavedData() {
         p2NScoreInp.value = data.p2NScore || p2NScoreInp.value;
 
         charP2 = data.p2Character || "Random";
-        skinP2 = data.p2Skin || `${charP2} (1)`;
+        skinP2 = data.p2Skin || `1`;
         colorP2 = data.p2Color || "Blue";
         currentP2WL = data.p2WL || "Nada";
 
@@ -567,11 +567,11 @@ async function updateColor() {
             //also, if random is up, change its color
             if (pNum == 1) {
                 if (charP1 == "Random") {
-                    document.getElementById('p1CharImg').setAttribute('src', charPath + '/Renders/Random.png');
+                    document.getElementById('p1CharImg').setAttribute('src', charPath + '/Renders/Random.webp');
                 }
             } else {
                 if (charP2 == "Random") {
-                    document.getElementById('p2CharImg').setAttribute('src', charPath + '/Renders/Random.png');
+                    document.getElementById('p2CharImg').setAttribute('src', charPath + '/Renders/Random.webp');
                 }
             }
 
@@ -584,11 +584,11 @@ async function updateColor() {
 
 
 //change the image path depending on the character and skin
-function charImgChange(charImg, charName, skinName = `${charName} (1)`) {
+function charImgChange(charImg, charName, skinName = `1`) {
     if (charName != "Random") {
-        charImg.setAttribute('src', charPath + '/Renders/' + charName + '/' + skinName + '.png');
+        charImg.setAttribute('src', charPath + '/Renders/' + charName + '/' + skinName + '.webp');
     } else {
-        charImg.setAttribute('src', charPath + '/Renders/Random.png');
+        charImg.setAttribute('src', charPath + '/Renders/Random.webp');
     }
 }
 
@@ -655,13 +655,13 @@ function filterChars() {
 function changeCharacter() {
     if (charP1Active) {
         charP1 = this.id;
-        skinP1 = `${charP1} (1)`;
+        skinP1 = `1`;
         document.getElementById('p1CharSelector').setAttribute('src', charPath + '/CSS/' + charP1 + '.png');
         charImgChange(charImgP1, charP1);
         addSkinIcons(1);
     } else {
         charP2 = this.id;
-        skinP2 = `${charP2} (1)`;
+        skinP2 = `1`;
         document.getElementById('p2CharSelector').setAttribute('src', charPath + '/CSS/' + charP2 + '.png');
         charImgChange(charImgP2, charP2);
         addSkinIcons(2);
@@ -672,12 +672,12 @@ function changeCharacterManual(char, pNum) {
     document.getElementById('p' + pNum + 'CharSelector').setAttribute('src', charPath + '/CSS/' + char + '.png');
     if (pNum == 1) {
         charP1 = char;
-        skinP1 = `${charP1} (1)`;
+        skinP1 = `1`;
         charImgChange(charImgP1, char);
         addSkinIcons(1);
     } else {
         charP2 = char;
-        skinP2 = `${charP2} (1)`;
+        skinP2 = `1`;
         charImgChange(charImgP2, char);
         addSkinIcons(2);
     }

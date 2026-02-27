@@ -579,30 +579,30 @@ async function updateChar(pCharacter, pSkin, color, charID, direction) {
 		//if the image fails to load, we will put a placeholder
 		charEL.addEventListener("error", () => {
 			if (direction == "Left") {
-				charEL.setAttribute('src', 'Resources/Characters/Renders/Random.png');
+				charEL.setAttribute('src', 'Resources/Characters/Renders/Random.webp');
 			} else {
-				charEL.setAttribute('src', 'Resources/Characters/Renders/Random.png');
+				charEL.setAttribute('src', 'Resources/Characters/Renders/Random.webp');
 			}
 		})
 	}
 
 	//change the image path depending on the character, skin and direction
-	charEL.setAttribute('src', 'Resources/Characters/Renders/' + pCharacter + '/' + pSkin + '.png');
+	charEL.setAttribute('src', 'Resources/Characters/Renders/' + pCharacter + '/' + pSkin + '.webp');
 
 	//             x, y, scale
-	let charPos = [0, 0, 1];
+	// let charPos = [0, 0, 1];
 
-	if (charEL == document.getElementById("charP1")) {
-		charPos[0] = 223;
-	} else {
-		charPos[0] = 1185;
-	}
-	charPos[1] = 350;
-	charPos[2] = 1.88;
+	// if (charEL == document.getElementById("charP1")) {
+	// 	charPos[0] = 223;
+	// } else {
+	// 	charPos[0] = 1185;
+	// }
+	// charPos[1] = 350;
+	// charPos[2] = 1.88;
 
 
-	//to position the character
-	charEL.style.left = charPos[0] + "px";
-	charEL.style.top = charPos[1] + "px";
-	charEL.style.transform = "scale(" + charPos[2] + ")";
+	// //to position the character
+	// charEL.style.left = charPos[0] + "px";
+	// charEL.style.top = charPos[1] + "px";
+	// charEL.style.transform = "scale(" + charPos[2] + ")";
 }

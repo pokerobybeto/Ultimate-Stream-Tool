@@ -1,13 +1,13 @@
 {
     "skinList": [
-        "Mega Man (1)",
-        "Mega Man (2)",
-        "Mega Man (3)",
-        "Mega Man (4)",
-        "Mega Man (5)",
-        "Mega Man (6)",
-        "Mega Man (7)",
-        "Mega Man (8)"
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8"
     ],
     "Left": {
         "x": -75,

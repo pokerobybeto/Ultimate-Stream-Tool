@@ -29,7 +29,7 @@ const createWindow = () => {
     }
   });
 
-  // mainWindow.webContents.openDevTools(); 
+// mainWindow.webContents.openDevTools(); 
 
 
   // we dont like menus
