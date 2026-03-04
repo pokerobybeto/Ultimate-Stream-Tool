@@ -513,25 +513,20 @@ input[type="text"] {
 /* caster region */
 #casterInfo {
   height: 60px;
-  padding: 10px;
   padding: 8px 10px 12px 10px;
   z-index: 1;
+  display: flex;
+  gap: 4px;
 }
 
 .casterIcon {
   height: 20px;
-  width: fit-content;
+  width: 20px;
   margin: 5px;
   fill: #b6b6b6;
 }
 
-#caster1 {
-  padding-bottom: 4px;
-  display: flex;
-  justify-items: center;
-  z-index: 1;
-}
-#caster2 {
+.caster {
   display: flex;
   justify-items: center;
   z-index: 1;
