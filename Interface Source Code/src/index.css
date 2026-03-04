@@ -782,18 +782,26 @@ input[type="text"] {
 
 /* Mobile / Remote Control Adjustments */
 @media screen and (max-width: 850px) {
-  body {
-    overflow-y: auto;
+
+  html {
+    overflow-y: hidden;
+  }
+
+  #overlay {
+    overflow-x: hidden;
   }
   
   #viewport {
     height: auto;
-    min-height: 100vh;
+    min-height: 100dvh;
   }
 
-  #overlay, #settings, #bracket {
-    height: auto;
-    min-height: 100vh;
+  #overlay, #bracket {
+    height: 100dvh;
+  }
+
+  #settings {
+    height: 100dvh;
   }
 
   /* Stack players vertically */
@@ -801,33 +809,71 @@ input[type="text"] {
     flex-direction: column;
     height: auto;
   }
+  
+  .charImg {
+    position: absolute;
+  }
+  
+  .pEditor {
+    position: relative;
+  }
 
   .player {
     width: 100%;
     height: auto;
     min-height: 180px;
     margin-bottom: 5px;
-    border-bottom: 1px solid var(--bg4);
     padding-bottom: 10px;
+  }
+
+  #swapIcon {
+    transform: scale(1.5, 1.5) rotate(90deg);
+  }
+
+  #swapButton:hover #swapIcon {
+    opacity: 1;
+    transform: scale(2, 2) rotate(90deg);
+  }
+
+  #overlay {
+    width: 100vw;
   }
 
   /* Adjust separator (Swap/Clear buttons) */
   #playerSep {
-    width: 100%;
+    width: auto;
     height: 50px;
     display: flex;
     flex-direction: row;
     margin-bottom: 10px;
+    margin-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 
   #swapButton {
-    width: 80%;
+    width: auto;
     height: 100%;
+    flex-grow: 3;
+  }
+  
+  #settingsRegion {
+    width: auto;
+    height: auto;
+    padding-left: 10px;
+    padding-right: 10px;
   }
   
   #clearButton {
-    width: 20%;
+    flex-grow: 1;
+    margin-left: 5px;
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
+    justify-content: center;
     height: 100%;
+    width: auto;
+    border-left: 2px black;
   }
 
   /* Make inputs larger and full width for touch */
@@ -869,6 +915,8 @@ input[type="text"] {
   /* Score and Character Selector */
   .scoreInfo {
     margin-top: 5px;
+    margin-left: 0px;
+    padding: 10px;
     flex-wrap: wrap;
   }
   .scoreBox {
@@ -943,7 +991,7 @@ input[type="text"] {
 
   /* Settings */
   #actualSettings {
-    width: 100%;
+    width: stretch;
     padding: 10px;
   }
   #settingsTitle {
@@ -954,8 +1002,9 @@ input[type="text"] {
     align-items: center;
   }
   #copyMatch {
-    width: 100%;
+    width: fit-content;
     height: 50px;
+    text-wrap-mode: nowrap;
   }
 
   #closeSettings {
