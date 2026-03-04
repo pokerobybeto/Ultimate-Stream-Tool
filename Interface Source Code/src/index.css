@@ -520,19 +520,9 @@ input[type="text"] {
 
 .casterIcon {
   height: 20px;
-  width: 20px;
-  margin-left: -5px;
-  margin-top: 5px;
+  width: fit-content;
+  margin: 5px;
   fill: #b6b6b6;
-}
-
-#twitterIcon {
-  margin-right: 4px;
-  margin-left: 5px;
-}
-#twitchIcon {
-  margin-right: 4px;
-  margin-left: 5px;
 }
 
 #caster1 {
@@ -824,6 +814,7 @@ input[type="text"] {
     min-height: 180px;
     margin-bottom: 5px;
     padding-bottom: 10px;
+    overflow: clip;
   }
 
   #swapIcon {
@@ -911,6 +902,9 @@ input[type="text"] {
     height: 40px;
     width: 40px;
   }
+  .dropdownColor {
+    right: 0px;
+  }
 
   /* Score and Character Selector */
   .scoreInfo {
@@ -970,7 +964,7 @@ input[type="text"] {
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
     z-index: 1000;
   }
   .charInRoster {
