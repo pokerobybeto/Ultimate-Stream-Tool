@@ -1003,6 +1003,8 @@ input[type="text"] {
   }
   .charInRoster {
     width: 23%;
+    max-width: 100px;
+    min-width: 75px;
   }
 
   /* Bottom Bar */
