@@ -362,11 +362,13 @@ input[type="text"] {
 .charInfo {
   display: flex;
   align-items: center;
-  padding-left: 10px;
+  margin-left: 10px;
+  overflow-x: clip;
+  overflow-clip-margin: content-box;
 }
 
 .charSelector {
-  
+  z-index: 1;
 }
 
 .charSelectorImg {
@@ -390,8 +392,13 @@ input[type="text"] {
   flex-direction: column;
   align-items: center;
   opacity: 0;
+  z-index: 0;
 
   transition: border-color 100ms, opacity 200ms;
+  transition: margin-left 1s cubic-bezier(0.65, 0.05, 0.36, 1);
+}
+.skinSelectorNoSlide {
+  transition: margin-left 0.0s linear;
 }
 .skinSelector:hover {
   border-color: var(--selected);

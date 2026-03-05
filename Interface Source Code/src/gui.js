@@ -697,6 +697,9 @@ function changeCharacterManual(char, pNum) {
 //also called when we click those images
 async function addSkinIcons(pNum) {
     const skinList = document.getElementById('skinListP' + pNum);
+    const skinSelector = document.getElementById('skinSelectorP' + pNum)
+
+    skinSelector.style.opacity = 0;
 
     skinList.innerHTML = ''; //clear everything before adding
     let charInfo;
@@ -736,6 +739,15 @@ async function addSkinIcons(pNum) {
     } else {
         document.getElementById('skinSelectorP' + pNum).style.opacity = 1;
     }
+
+    skinSelector.classList.add("skinSelectorNoSlide")
+    skinSelector.style.marginLeft = "-100%";
+    
+    requestAnimationFrame(() => {
+        skinSelector.style.opacity = 1;
+        skinSelector.classList.remove("skinSelectorNoSlide");
+        skinSelector.style.marginLeft = "5px";
+    });
 }
 //whenever clicking on the skin images
 function changeSkinP1() {
