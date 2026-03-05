@@ -684,7 +684,9 @@ function changeCharacterManual(char, pNum) {
 }
 //also called when we click those images
 async function addSkinIcons(pNum) {
-    document.getElementById('skinListP' + pNum).innerHTML = ''; //clear everything before adding
+    const skinList = document.getElementById('skinListP' + pNum);
+
+    skinList.innerHTML = ''; //clear everything before adding
     let charInfo;
     if (pNum == 1) { //ahh the classic 'which character am i' check
         charInfo = await getJson("Character Info/" + charP1);
@@ -692,8 +694,10 @@ async function addSkinIcons(pNum) {
         charInfo = await getJson("Character Info/" + charP2);
     }
 
-
     if (charInfo != undefined) { //if character doesnt have a list (for example: Random), skip this
+        //clear list
+        skinList.replaceChildren([]);
+
         //add an image for every skin on the list
         for (let i = 0; i < charInfo.skinList.length; i++) {
             let newImg = document.createElement('img');
@@ -709,7 +713,7 @@ async function addSkinIcons(pNum) {
                 newImg.addEventListener("click", changeSkinP2);
             }
 
-            document.getElementById('skinListP' + pNum).appendChild(newImg);
+            skinList.appendChild(newImg);
         }
 
     }
