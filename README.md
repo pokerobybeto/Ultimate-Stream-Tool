@@ -25,10 +25,10 @@ If you are also interested in adapting your layout with the stream tool or havin
 You can watch [this video](https://www.youtube.com/watch?v=417QjymeOMk) I made or follow the steps below. 
 
 These are instructions for regular OBS Studio, but I imagine you can do the same with other streaming software:
-- Dowmload the ZIP file.
+- Download the ZIP file.
 - Extract somewhere.
 - Drag and drop `Game Scoreboard.html` into OBS, or add a new browser source in OBS pointing at the local file.
-- If the source looks weird, manually set the source's propierties to 1920 width and 1080 height, or set your OBS canvas resolution to 1080p, or make the source fit the screen.
+- If the source looks weird, manually set the source's properties to 1920 width and 1080 height, or set your OBS canvas resolution to 1080p, or make the source fit the screen.
 - In the source's propierties, change *Use custom frame rate* -> `60` (if streaming at 60fps of course).
 - **Also tick** `Refresh browser when scene becomes active`.
 - Manage it all with the `Ultimate ST` executable.
@@ -49,6 +49,11 @@ Repeat from the 3rd step to add the `VS Screen.html` and `Caster Screen.html`, t
 
 The interface will also update basic text files with the match info at `Resources/Texts/Simple Texts/` so you can add them to OBS with ease.
 
+### Remote Control
+
+The Stream Tool supports remote control! Use a browser on your phone or a computer to access.
+
+The URL can be found in the Stream Tool's options (The hamburger icon in the bottom right corner), along with a QR code to the remote control.
 
 ---
 
