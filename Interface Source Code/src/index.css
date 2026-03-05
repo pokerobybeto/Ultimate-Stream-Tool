@@ -163,6 +163,12 @@ input[type="text"] {
   box-sizing: border-box;
   float: right;
   transform: scale(5);
+
+  margin-right: 0vw;
+  transition: margin 0.8s cubic-bezier(0.65, 0.05, 0.36, 1);
+}
+.charImgNoSlide {
+  transition: margin 0s linear;
 }
 
 
@@ -395,7 +401,7 @@ input[type="text"] {
   z-index: 0;
 
   transition: border-color 100ms, opacity 200ms;
-  transition: margin-left 1s cubic-bezier(0.65, 0.05, 0.36, 1);
+  transition: margin-left 0.8s cubic-bezier(0.65, 0.05, 0.36, 1);
 }
 .skinSelectorNoSlide {
   transition: margin-left 0.0s linear;

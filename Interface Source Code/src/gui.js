@@ -583,6 +583,13 @@ function charImgChange(charImg, charName, skinName = `1`) {
     } else {
         charImg.setAttribute('src', charPath + '/Renders/Random.webp');
     }
+
+    charImg.classList.add("charImgNoSlide")
+    charImg.style.marginRight = "-200vw";
+    requestAnimationFrame(() => {
+        charImg.classList.remove("charImgNoSlide");
+        charImg.style.marginRight = "0px";
+    });
 }
 
 
