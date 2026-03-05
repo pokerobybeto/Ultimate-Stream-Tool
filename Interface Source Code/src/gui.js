@@ -383,14 +383,14 @@ async function loadSavedData() {
         let interfaceInfo = await getJson("InterfaceInfo");
         if (interfaceInfo) {
             for (let i = 0; i < Object.keys(interfaceInfo.colorSlots).length; i++) {
+                var targetPlayer = 0;
                 if (interfaceInfo.colorSlots["color" + i].name == colorP1) {
-                    document.getElementById("p1ColorRect").style.backgroundColor = interfaceInfo.colorSlots["color" + i].hex;
-                    document.getElementById("player1").style.backgroundImage = "linear-gradient(to bottom left, " + interfaceInfo.colorSlots["color" + i].hex + "50, #00000000, #00000000)";
+                    targetPlayer = 1;
                 }
                 if (interfaceInfo.colorSlots["color" + i].name == colorP2) {
-                    document.getElementById("p2ColorRect").style.backgroundColor = interfaceInfo.colorSlots["color" + i].hex;
-                    document.getElementById("player2").style.backgroundImage = "linear-gradient(to bottom left, " + interfaceInfo.colorSlots["color" + i].hex + "50, #00000000, #00000000)";
+                    targetPlayer = 2;
                 }
+                changeBGColor(targetPlayer, interfaceInfo.colorSlots["color" + i].hex);
             }
         }
 
@@ -519,14 +519,7 @@ async function loadColors(pNum) {
         document.getElementById("dropdownColorP" + pNum).appendChild(newDiv);
     }
 
-    //set the initial colors for the interface (the first color for p1, and the second for p2)
-    if (pNum == 1) {
-        document.getElementById("player1").style.backgroundImage = "linear-gradient(to bottom left, " + colorList.colorSlots["color" + 0].hex + "50, #00000000, #00000000)";
-        document.getElementById("p1ColorRect").style.backgroundColor = colorList.colorSlots["color" + 0].hex;
-    } else {
-        document.getElementById("player2").style.backgroundImage = "linear-gradient(to bottom left, " + colorList.colorSlots["color" + 1].hex + "50, #00000000, #00000000)";
-        document.getElementById("p2ColorRect").style.backgroundColor = colorList.colorSlots["color" + 1].hex;
-    }
+    changeBGColor(pNum, colorList.colorSlots["color" + 0].hex);
 
     //finally, set initial values for the global color variables
     colorP1 = "Red";
@@ -551,7 +544,6 @@ async function updateColor() {
             let colorRectangle, colorGrad;
 
             colorRectangle = document.getElementById("p" + pNum + "ColorRect");
-            colorGrad = document.getElementById("player" + pNum);
 
             //change the variable that will be read when clicking the update button
             if (pNum == 1) {
@@ -562,7 +554,8 @@ async function updateColor() {
 
             //then change both the color rectangle and the background gradient
             colorRectangle.style.backgroundColor = colorList.colorSlots["color" + i].hex;
-            colorGrad.style.backgroundImage = "linear-gradient(to bottom left, " + colorList.colorSlots["color" + i].hex + "50, #00000000, #00000000)";
+            
+            changeBGColor(pNum, colorList.colorSlots["color" + i].hex);
 
             //also, if random is up, change its color
             if (pNum == 1) {
@@ -651,6 +644,25 @@ function filterChars() {
     }
 }
 
+function changeBGColor(pNum, hex) {
+    if (pNum < 1 || 2 < pNum) return;
+
+    document.getElementById(`p${pNum}ColorRect`).style.backgroundColor = hex;
+
+    var baseBG = document.getElementById(`player${pNum}BGColBase`);
+    var transitionBG = document.getElementById(`player${pNum}BGColTransition`);
+
+    transitionBG.style.backgroundImage = baseBG.style.backgroundImage;
+    transitionBG.classList.add("playerBDColNoTransition");
+    transitionBG.style.opacity = 1;
+
+    requestAnimationFrame(() => {
+        transitionBG.classList.remove("playerBDColNoTransition");
+        transitionBG.style.opacity = 0;
+        baseBG.style.backgroundImage = "linear-gradient(to bottom left, " + hex + "50, var(--bg2), var(--bg2))";
+    });
+}
+
 //called whenever clicking an image in the character roster
 function changeCharacter() {
     if (charP1Active) {
@@ -712,7 +724,7 @@ async function addSkinIcons(pNum) {
                 newImg.setAttribute('src', charPath + '/Stock Icons/' + charP2 + '/' + charInfo.skinList[i] + '.png');
                 newImg.addEventListener("click", changeSkinP2);
             }
-
+            
             skinList.appendChild(newImg);
         }
 

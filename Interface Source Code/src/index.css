@@ -123,11 +123,35 @@ input[type="text"] {
   position: relative;
 }
 
+.playerBGCol {
+  background-color: var(--bg2);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.playerBGColBase {
+  opacity: 1;
+}
+
+.playerBGColTransition {
+  opacity: 0;
+
+  transition: opacity 0.4s ease;
+}
+
+.playerBDColNoTransition {
+  transition: none;
+}
+
 
 .charImgBox {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  z-index: 3;
+  position: absolute;
 }
 
 .charImg {
@@ -150,6 +174,7 @@ input[type="text"] {
   height: 100%;
   display: grid;
   align-items: center;
+  z-index: 3;
 }
 
 
@@ -233,7 +258,7 @@ input[type="text"] {
 
 .dropdownColor {
   display: none;
-  position: absolute;
+  position: fixed;
   background-color: var(--bg5);
   width: 100px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
@@ -361,11 +386,12 @@ input[type="text"] {
   box-sizing: border-box;
   border-radius: 3px;
   border: 1px solid var(--bg4);
-  transition: border-color 100ms, opacity 200ms;
   display: flex;
   flex-direction: column;
   align-items: center;
   opacity: 0;
+
+  transition: border-color 100ms, opacity 200ms;
 }
 .skinSelector:hover {
   border-color: var(--selected);
