@@ -993,6 +993,7 @@ input[type="text"] {
   #casterInfo {
     height: auto;
     flex-direction: column;
+    margin-bottom: 50px; /* Extra space for bottom bar */
   }
   .caster {
     flex-wrap: wrap;
@@ -1020,7 +1021,14 @@ input[type="text"] {
 
   /* Bottom Bar */
   #botBar {
+    position: absolute;
+    z-index: 2;
+
+    bottom: 0px;
+    left: 100vw;
+
     height: 50px;
+    width: 100vw;
   }
   .botText {
     font-size: 20px;
