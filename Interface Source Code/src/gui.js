@@ -79,7 +79,11 @@ const roundInp = document.getElementById('roundName');
 const formatInp = document.getElementById('format');
 
 const forceWL = document.getElementById('forceWLToggle');
+const remotePasswordInp = document.getElementById('remotePassword');
 
+let remotePassword = "";
+let remotePasswordSaveTimer;
+let remoteAccessUrls = [];
 
 async function init() {
 
@@ -93,6 +97,9 @@ async function init() {
 
     //move the viewport to the center (this is to avoid animation bugs)
     viewport.style.right = "100%";
+
+    initRemotePassword();
+    if (isElectron) await loadRemoteSecuritySettings();
 
 
     /* OVERLAY */
@@ -230,37 +237,20 @@ async function init() {
 
     // display IP addresses if in Electron
     if (isElectron) {
-        const remoteInfo = document.getElementById('remoteInfo');
-        const ipListDisplay = document.getElementById('ipList');
         const interfaces = os.networkInterfaces();
-        let addresses = [];
+        remoteAccessUrls = [];
 
         for (const k in interfaces) {
             for (const k2 in interfaces[k]) {
                 const address = interfaces[k][k2];
                 // filter for IPv4 and non-internal (not 127.0.0.1)
                 if (address.family === 'IPv4' && !address.internal) {
-                    addresses.push(`http://${address.address}:1111`);
+                    remoteAccessUrls.push(`http://${address.address}:1111`);
                 }
             }
         }
 
-        if (addresses.length > 0) {
-            remoteInfo.style.display = "block";
-            ipListDisplay.innerHTML = addresses.join('<br>');
-
-            // Generate QR Code
-            const qrContainer = document.getElementById("qrcode");
-            qrContainer.innerHTML = "";
-            new QRCode(qrContainer, {
-                text: addresses[0],
-                width: 64,
-                height: 64,
-                colorDark : "#000000",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.L
-            });
-        }
+        renderRemoteAccess();
     }
 
     // const numberedScoreOption = document.querySelector("#forceNS");
@@ -318,7 +308,9 @@ async function getJson(fileName) {
         }
     } else {
         try {
-            const response = await fetch('/api/json/' + fileName);
+            const response = await fetch('/api/json/' + fileName, {
+                headers: getAuthHeaders()
+            });
             if (!response.ok) return undefined;
             return await response.json();
         } catch (error) {
@@ -425,14 +417,29 @@ async function loadSavedData() {
 // polling logic
 let localTimestamp = Date.now();
 let isSaving = false;
+let statusMessageTimer;
 
 const API_BASE = isElectron ? 'http://localhost:1111' : '';
+
+function showStatusMessage(message) {
+    const popup = document.getElementById('remoteUpdatePopup');
+    if (!popup) return;
+
+    popup.textContent = message;
+    popup.classList.add('show');
+    clearTimeout(statusMessageTimer);
+    statusMessageTimer = setTimeout(() => {
+        popup.classList.remove('show');
+    }, 1500);
+}
 
 async function pollForUpdates() {
     if (isSaving) return;
 
     try {
-        const response = await fetch(API_BASE + '/api/last-update');
+        const response = await fetch(API_BASE + '/api/last-update', {
+            headers: getAuthHeaders()
+        });
         const data = await response.json();
 
         if (data.timestamp > localTimestamp) {
@@ -440,14 +447,7 @@ async function pollForUpdates() {
             await loadSavedData();
             localTimestamp = data.timestamp;
 
-            // show notification
-            const popup = document.getElementById('remoteUpdatePopup');
-            if (popup) {
-                popup.classList.add('show');
-                setTimeout(() => {
-                    popup.classList.remove('show');
-                }, 1000);
-            }
+            showStatusMessage("Overlay remotely updated");
         }
     } catch (error) {
         console.error("Polling error:", error);
@@ -463,18 +463,25 @@ async function saveData(data) {
         const response = await fetch(API_BASE + '/api/scoreboard', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                ...getAuthHeaders()
             },
             body: JSON.stringify(data)
         });
 
         if (response.ok) {
-            const updateResponse = await fetch(API_BASE + '/api/last-update');
+            const updateResponse = await fetch(API_BASE + '/api/last-update', {
+                headers: getAuthHeaders()
+            });
             const updateData = await updateResponse.json();
             localTimestamp = updateData.timestamp;
             console.log("Data saved and timestamp updated");
+        } else if (response.status === 401) {
+            console.error("Error saving data via API: invalid remote password");
+            showStatusMessage("Invalid remote password");
         } else {
             console.error("Error saving data via API");
+            showStatusMessage("Could not save update");
         }
     } catch (error) {
         console.error("Error saving data:", error);
@@ -1136,4 +1143,97 @@ async function writeScoreboard() {
     };
 
     await saveData(scoreboardJson);
+}
+
+function initRemotePassword() {
+    if (!remotePasswordInp) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const urlPassword = params.get('password');
+    const savedPassword = window.sessionStorage.getItem('remotePassword') || "";
+    remotePassword = urlPassword !== null ? urlPassword : savedPassword;
+    remotePasswordInp.value = remotePassword;
+
+    remotePasswordInp.addEventListener("input", () => {
+        remotePassword = remotePasswordInp.value.trim();
+        window.sessionStorage.setItem('remotePassword', remotePassword);
+
+        if (isElectron) {
+            renderRemoteAccess();
+            clearTimeout(remotePasswordSaveTimer);
+            remotePasswordSaveTimer = setTimeout(saveRemoteSecuritySettings, 300);
+        }
+    });
+
+    remotePasswordInp.addEventListener("change", () => {
+        if (isElectron) saveRemoteSecuritySettings();
+    });
+}
+
+async function loadRemoteSecuritySettings() {
+    try {
+        const response = await fetch('http://localhost:1111/api/security');
+        if (!response.ok) return;
+
+        const settings = await response.json();
+        remotePassword = settings.password || "";
+        if (remotePasswordInp) remotePasswordInp.value = remotePassword;
+        window.sessionStorage.setItem('remotePassword', remotePassword);
+    } catch (error) {
+        console.error("Error loading remote password settings:", error);
+    }
+}
+
+async function saveRemoteSecuritySettings() {
+    try {
+        const response = await fetch('http://localhost:1111/api/security', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ password: remotePassword })
+        });
+
+        if (!response.ok) {
+            console.error("Error saving remote password settings");
+        }
+    } catch (error) {
+        console.error("Error saving remote password settings:", error);
+    }
+}
+
+function buildRemoteUrl(address) {
+    const url = new URL(address);
+    if (remotePassword) url.searchParams.set('password', remotePassword);
+    return url.toString();
+}
+
+function renderRemoteAccess() {
+    if (!isElectron || remoteAccessUrls.length === 0) return;
+
+    const remoteInfo = document.getElementById('remoteInfo');
+    const ipListDisplay = document.getElementById('ipList');
+    const qrContainer = document.getElementById("qrcode");
+    const urls = remoteAccessUrls.map(buildRemoteUrl);
+
+    remoteInfo.style.display = "block";
+    ipListDisplay.replaceChildren();
+    urls.forEach((url, index) => {
+        if (index > 0) ipListDisplay.appendChild(document.createElement('br'));
+        ipListDisplay.appendChild(document.createTextNode(url));
+    });
+
+    qrContainer.innerHTML = "";
+    new QRCode(qrContainer, {
+        text: urls[0],
+        width: 64,
+        height: 64,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.L
+    });
+}
+
+function getAuthHeaders() {
+    return remotePassword ? { 'X-Stream-Tool-Password': remotePassword } : {};
 }

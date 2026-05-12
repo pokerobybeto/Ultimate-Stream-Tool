@@ -695,6 +695,13 @@ input[type="text"] {
   width: 100%;
 }
 
+.settingTextInput {
+  width: 160px;
+  height: 28px;
+  margin-right: 8px;
+  font-size: 16px;
+}
+
 
 /* clickable area that gets enabled when moving the viewport */
 #goBack {
@@ -1025,7 +1032,7 @@ input[type="text"] {
 
   /* Settings */
   #actualSettings {
-    width: stretch;
+    width: calc(100% - 30px);
     padding: 10px;
   }
   #settingsTitle {
@@ -1034,6 +1041,7 @@ input[type="text"] {
   .settingBox {
     height: 50px;
     align-items: center;
+    width: 100%;
   }
   #copyMatch {
     width: fit-content;
