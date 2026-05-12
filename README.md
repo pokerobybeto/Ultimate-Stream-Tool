@@ -55,6 +55,10 @@ The Stream Tool supports remote control! Use a browser on your phone or a comput
 
 The URL can be found in the Stream Tool's options (The hamburger icon in the bottom right corner), along with a QR code to the remote control.
 
+A password can be set, disallowing any browser without it to update the scoreboard. The QR code will provide the password when scanned automatically, or you can set the password in the ***same password field but on your browser***
+
+Blank means no password is required.
+
 ---
 
 ## Customizing stuff
