@@ -901,6 +901,10 @@ input[type="text"] {
     border-left: 2px black;
   }
 
+  input[type="text"] {
+    font-size: 16px;
+  }
+
   /* Make inputs larger and full width for touch */
   .textInput {
     height: 40px;
