@@ -3,6 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 
 const app = express();
 const port = 1111;
@@ -24,40 +25,115 @@ if (isDev) {
 const mainPath = path.resolve(baseDir, 'Resources', 'Texts');
 const guiPath = __dirname;
 const resourcesPath = path.resolve(baseDir, 'Resources');
+const remoteSettingsPath = path.join(mainPath, 'RemoteSettings.json');
 
 console.log("Server Base Dir:", baseDir);
+
+function readRemoteSettings() {
+    try {
+        if (!fs.existsSync(remoteSettingsPath)) return { password: "" };
+
+        const settings = JSON.parse(fs.readFileSync(remoteSettingsPath, 'utf8'));
+        return {
+            password: typeof settings.password === 'string' ? settings.password : ""
+        };
+    } catch (error) {
+        console.error("Error reading remote settings:", error);
+        return { password: "" };
+    }
+}
+
+function writeRemoteSettings(settings) {
+    fs.writeFileSync(remoteSettingsPath, JSON.stringify(settings, null, 2));
+}
+
+let remotePassword = readRemoteSettings().password;
+
+function isLocalRequest(request) {
+    const address = request.ip || request.socket.remoteAddress || "";
+    return address === "127.0.0.1" ||
+        address === "::1" ||
+        address === "::ffff:127.0.0.1" ||
+        address === "localhost";
+}
+
+function getRequestPassword(request) {
+    return request.get('x-stream-tool-password') ||
+        request.query.password ||
+        (request.body && request.body.password) ||
+        "";
+}
+
+function passwordsMatch(providedPassword, expectedPassword) {
+    if (!expectedPassword) return true;
+    if (typeof providedPassword !== 'string') return false;
+
+    const provided = Buffer.from(providedPassword);
+    const expected = Buffer.from(expectedPassword);
+    return provided.length === expected.length && crypto.timingSafeEqual(provided, expected);
+}
+
+function requireRemotePassword(request, response, next) {
+    if (!remotePassword || isLocalRequest(request) || passwordsMatch(getRequestPassword(request), remotePassword)) {
+        next();
+        return;
+    }
+
+    response.status(401).json({ error: "Invalid remote password" });
+}
 
 app.use(express.static(guiPath));
 app.use('/Resources', express.static(resourcesPath));
 
-app.get(/\/api\/json\/(.*)/, (req, res) => {
+app.get('/api/security', (request, response) => {
+    if (isLocalRequest(request)) {
+        response.json({ passwordEnabled: Boolean(remotePassword), password: remotePassword });
+        return;
+    }
+
+    response.json({ passwordEnabled: Boolean(remotePassword) });
+});
+
+app.post('/api/security', (request, response) => {
+    if (!isLocalRequest(request)) {
+        response.status(403).json({ error: "Remote security settings can only be changed locally" });
+        return;
+    }
+
+    remotePassword = typeof request.body.password === 'string' ? request.body.password.trim() : "";
+    writeRemoteSettings({ password: remotePassword });
+    response.json({ passwordEnabled: Boolean(remotePassword) });
+});
+
+app.get(/\/api\/json\/(.*)/, (request, response) => {
     try {
-        const fileParam = req.params[0];
+        const fileParam = request.params[0];
         const filePath = path.resolve(mainPath, fileParam + '.json');
 
         if (fs.existsSync(filePath)) {
             const data = fs.readFileSync(filePath, 'utf8');
-            res.json(JSON.parse(data));
+            response.json(JSON.parse(data));
         } else {
             console.error("File not found:", filePath);
-            res.status(404).send('File not found');
+            response.status(404).send('File not found');
         }
     } catch (error) {
         console.error("Error reading file:", error);
-        res.status(500).send('Error reading file');
+        response.status(500).send('Error reading file');
     }
 });
 
 let lastUpdateTimestamp = Date.now();
 
-app.get('/api/last-update', (req, res) => {
-    res.json({ timestamp: lastUpdateTimestamp });
+app.get('/api/last-update', (request, response) => {
+    response.json({ timestamp: lastUpdateTimestamp });
 });
 
 // API to update ScoreboardInfo and text files
-app.post('/api/scoreboard', (req, res) => {
+app.post('/api/scoreboard', requireRemotePassword, (request, response) => {
     try {
-        const scoreboardJson = req.body;
+        const scoreboardJson = { ...(request.body || {}) };
+        delete scoreboardJson.password;
         const data = JSON.stringify(scoreboardJson, null, 2);
 
         fs.writeFileSync(path.join(mainPath, "ScoreboardInfo.json"), data);
@@ -83,10 +159,10 @@ app.post('/api/scoreboard', (req, res) => {
         lastUpdateTimestamp = Date.now();
 
         console.log("Scoreboard updated");
-        res.send({ status: 'success' });
+        response.send({ status: 'success' });
     } catch (error) {
         console.error("Error writing scoreboard:", error);
-        res.status(500).send('Error writing scoreboard');
+        response.status(500).send('Error writing scoreboard');
     }
 });
 

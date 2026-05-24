@@ -21,7 +21,7 @@ const createWindow = () => {
     width: baseWidth + adjustment,
     height: baseHeight + adjustment,
     resizable: false,
-
+    icon: path.join(__dirname, '..', 'build', 'icon.ico'),
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,

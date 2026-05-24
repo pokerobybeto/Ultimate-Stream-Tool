@@ -25,6 +25,8 @@
         <div id="playerRegion">
 
           <div id="player1" class="player">
+            <div id="player1BGColBase" class="playerBGCol playerBGColBase"></div>
+            <div id="player1BGColTransition" class="playerBGCol playerBGColTransition playerBDColNoTransition"></div>
 
             <div class="charImgBox">
               <img id="p1CharImg" class="charImg"/>
@@ -34,7 +36,7 @@
 
               <div id="p1Info" class="pInfo">
                 <input type="text" id="p1Tag" class="textInput mousetrap" tabindex="1" placeholder="Tag" title="Insert the tag/team/sponsor here" spellcheck="false" contenteditable="true">
-                <input type="text" id="p1Pron" class="textInput mousetrap" tabindex="3" placeholder="Pron" title="Insert the pronoun here." spellcheck="false">
+                <input type="text" id="p1Pron" class="textInput mousetrap" tabindex="3" placeholder="Pronoun" title="Insert the pronoun here." spellcheck="false">
                 <input type="text" id="p1Name" class="textInput mousetrap" tabindex="2" placeholder="Player 1" title="Insert P1's name here" spellcheck="false">
                 <div id="p1Color" class="pColor" tabindex="5" title="Change the color slot for this player">
                   <div class="colorContainer">
@@ -70,11 +72,9 @@
                   <img class="charSelectorImg" id="p1CharSelector" tabindex="50"/>
                 </div>
 
-                <div>
-                  <div class="skinSelector" id="skinSelectorP1">
-                    <div id="skinListP1"></div>
-                    <div id="skinListP1Sheik"></div>
-                  </div>
+                <div class="skinSelector" id="skinSelectorP1">
+                  <div id="skinListP1"></div>
+                  <div id="skinListP1Sheik"></div>
                 </div>
 
               </div>
@@ -99,6 +99,9 @@
           
   
           <div id="player2" class="player">
+
+            <div id="player2BGColBase" class="playerBGCol playerBGColBase"></div>
+            <div id="player2BGColTransition" class="playerBGCol playerBGColTransition playerBDColNoTransition"></div>
 
             <div class="charImgBox">
               <img id="p2CharImg" class="charImg"/>
@@ -141,11 +144,9 @@
                   <img class="charSelectorImg" id="p2CharSelector" tabindex="50"/>
                 </div>
 
-                <div>
-                  <div class="skinSelector" id="skinSelectorP2">
-                    <div id="skinListP2"></div>
-                    <div id="skinListP2Sheik"></div>
-                  </div>
+                <div class="skinSelector" id="skinSelectorP2">
+                  <div id="skinListP2"></div>
+                  <div id="skinListP2Sheik"></div>
                 </div>
 
               </div>
@@ -247,6 +248,11 @@
               </div>
               <div id="qrcode" style="background-color: white; padding: 5px; border-radius: 4px; margin-left: 10px;"></div>
             </div>
+          </div>
+
+          <div class="settingBox" title="Optional password required for remote updates when set.">
+            <label for="remotePassword" class="settingsText">Remote Password</label>
+            <input type="password" id="remotePassword" class="textInput mousetrap settingTextInput" placeholder="No password" autocomplete="off" spellcheck="false" tabindex="-1">
           </div>
 
           <div class="settingBox" title="Plays an intro on 'Scoreboard.html' whenever the file loads">
