@@ -21,7 +21,9 @@
   "license": "MIT",
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "icon": "build/icon"
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
@@ -65,7 +67,8 @@
   "build": {
     "appId": "test.testo.testu",
     "win": {
-      "target": "portable"
+      "target": "portable",
+      "icon": "build/icon.ico"
     }
   }
 }
