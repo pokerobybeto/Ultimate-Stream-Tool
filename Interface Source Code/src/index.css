@@ -123,11 +123,35 @@ input[type="text"] {
   position: relative;
 }
 
+.playerBGCol {
+  background-color: var(--bg2);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.playerBGColBase {
+  opacity: 1;
+}
+
+.playerBGColTransition {
+  opacity: 0;
+
+  transition: opacity 0.4s ease;
+}
+
+.playerBDColNoTransition {
+  transition: none;
+}
+
 
 .charImgBox {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  z-index: 3;
+  position: absolute;
 }
 
 .charImg {
@@ -139,6 +163,12 @@ input[type="text"] {
   box-sizing: border-box;
   float: right;
   transform: scale(5);
+
+  margin-right: 0vw;
+  transition: margin 0.8s cubic-bezier(0.65, 0.05, 0.36, 1);
+}
+.charImgNoSlide {
+  transition: margin 0s linear;
 }
 
 
@@ -150,6 +180,7 @@ input[type="text"] {
   height: 100%;
   display: grid;
   align-items: center;
+  z-index: 3;
 }
 
 
@@ -233,7 +264,7 @@ input[type="text"] {
 
 .dropdownColor {
   display: none;
-  position: absolute;
+  position: fixed;
   background-color: var(--bg5);
   width: 100px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
@@ -337,11 +368,13 @@ input[type="text"] {
 .charInfo {
   display: flex;
   align-items: center;
-  padding-left: 10px;
+  margin-left: 10px;
+  overflow-x: clip;
+  overflow-clip-margin: content-box;
 }
 
 .charSelector {
-  
+  z-index: 1;
 }
 
 .charSelectorImg {
@@ -361,11 +394,17 @@ input[type="text"] {
   box-sizing: border-box;
   border-radius: 3px;
   border: 1px solid var(--bg4);
-  transition: border-color 100ms, opacity 200ms;
   display: flex;
   flex-direction: column;
   align-items: center;
   opacity: 0;
+  z-index: 0;
+
+  transition: border-color 100ms, opacity 200ms;
+  transition: margin-left 0.8s cubic-bezier(0.65, 0.05, 0.36, 1);
+}
+.skinSelectorNoSlide {
+  transition: margin-left 0.0s linear;
 }
 .skinSelector:hover {
   border-color: var(--selected);
@@ -513,35 +552,20 @@ input[type="text"] {
 /* caster region */
 #casterInfo {
   height: 60px;
-  padding: 10px;
   padding: 8px 10px 12px 10px;
   z-index: 1;
+  display: flex;
+  gap: 4px;
 }
 
 .casterIcon {
   height: 20px;
   width: 20px;
-  margin-left: -5px;
-  margin-top: 5px;
+  margin: 5px;
   fill: #b6b6b6;
 }
 
-#twitterIcon {
-  margin-right: 4px;
-  margin-left: 5px;
-}
-#twitchIcon {
-  margin-right: 4px;
-  margin-left: 5px;
-}
-
-#caster1 {
-  padding-bottom: 4px;
-  display: flex;
-  justify-items: center;
-  z-index: 1;
-}
-#caster2 {
+.caster {
   display: flex;
   justify-items: center;
   z-index: 1;
@@ -671,6 +695,13 @@ input[type="text"] {
   width: 100%;
 }
 
+.settingTextInput {
+  width: 160px;
+  height: 28px;
+  margin-right: 8px;
+  font-size: 16px;
+}
+
 
 /* clickable area that gets enabled when moving the viewport */
 #goBack {
@@ -782,18 +813,26 @@ input[type="text"] {
 
 /* Mobile / Remote Control Adjustments */
 @media screen and (max-width: 850px) {
-  body {
-    overflow-y: auto;
+
+  html {
+    overflow-y: hidden;
+  }
+
+  #overlay {
+    overflow-x: hidden;
   }
   
   #viewport {
     height: auto;
-    min-height: 100vh;
+    min-height: 100dvh;
   }
 
-  #overlay, #settings, #bracket {
-    height: auto;
-    min-height: 100vh;
+  #overlay, #bracket {
+    height: 100dvh;
+  }
+
+  #settings {
+    height: 100dvh;
   }
 
   /* Stack players vertically */
@@ -801,33 +840,76 @@ input[type="text"] {
     flex-direction: column;
     height: auto;
   }
+  
+  .charImg {
+    position: absolute;
+  }
+  
+  .pEditor {
+    position: relative;
+  }
 
   .player {
     width: 100%;
     height: auto;
     min-height: 180px;
     margin-bottom: 5px;
-    border-bottom: 1px solid var(--bg4);
     padding-bottom: 10px;
+    overflow: clip;
+  }
+
+  #swapIcon {
+    transform: scale(1.5, 1.5) rotate(90deg);
+  }
+
+  #swapButton:hover #swapIcon {
+    opacity: 1;
+    transform: scale(2, 2) rotate(90deg);
+  }
+
+  #overlay {
+    width: 100vw;
   }
 
   /* Adjust separator (Swap/Clear buttons) */
   #playerSep {
-    width: 100%;
+    width: auto;
     height: 50px;
     display: flex;
     flex-direction: row;
     margin-bottom: 10px;
+    margin-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 
   #swapButton {
-    width: 80%;
+    width: auto;
     height: 100%;
+    flex-grow: 3;
+  }
+  
+  #settingsRegion {
+    width: auto;
+    height: auto;
+    padding-left: 10px;
+    padding-right: 10px;
   }
   
   #clearButton {
-    width: 20%;
+    flex-grow: 1;
+    margin-left: 5px;
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
+    justify-content: center;
     height: 100%;
+    width: auto;
+    border-left: 2px black;
+  }
+
+  input[type="text"] {
+    font-size: 16px;
   }
 
   /* Make inputs larger and full width for touch */
@@ -865,10 +947,15 @@ input[type="text"] {
     height: 40px;
     width: 40px;
   }
+  .dropdownColor {
+    right: 0px;
+  }
 
   /* Score and Character Selector */
   .scoreInfo {
     margin-top: 5px;
+    margin-left: 0px;
+    padding: 10px;
     flex-wrap: wrap;
   }
   .scoreBox {
@@ -906,6 +993,7 @@ input[type="text"] {
   #casterInfo {
     height: auto;
     flex-direction: column;
+    margin-bottom: 50px; /* Extra space for bottom bar */
   }
   .caster {
     flex-wrap: wrap;
@@ -922,16 +1010,25 @@ input[type="text"] {
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
     z-index: 1000;
   }
   .charInRoster {
     width: 23%;
+    max-width: 100px;
+    min-width: 75px;
   }
 
   /* Bottom Bar */
   #botBar {
+    position: absolute;
+    z-index: 2;
+
+    bottom: 0px;
+    left: 100vw;
+
     height: 50px;
+    width: 100vw;
   }
   .botText {
     font-size: 20px;
@@ -943,7 +1040,7 @@ input[type="text"] {
 
   /* Settings */
   #actualSettings {
-    width: 100%;
+    width: calc(100% - 30px);
     padding: 10px;
   }
   #settingsTitle {
@@ -952,10 +1049,12 @@ input[type="text"] {
   .settingBox {
     height: 50px;
     align-items: center;
+    width: 100%;
   }
   #copyMatch {
-    width: 100%;
+    width: fit-content;
     height: 50px;
+    text-wrap-mode: nowrap;
   }
 
   #closeSettings {

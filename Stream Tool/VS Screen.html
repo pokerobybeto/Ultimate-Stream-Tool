@@ -139,13 +139,24 @@
             position: absolute;
         }
 
+        .characterHalf {
+            width: 50vw;
+            height: 100vh;
+            overflow-x: clip;
+        }
+
         #charP1 {
             left: -2024px;
             top: -1900px;
         }
 
+        #charaP2 {
+            position: absolute;
+            left: 50vw;
+        }
+
         #charP2 {
-            left: -1064px;
+            left: calc(-50vw - 1064px);
             top: -1900px;
         }
 
@@ -303,13 +314,13 @@
 
     <div id="charas">
         <div class="absol">
-            <div id="charaP1">
+            <div id="charaP1" class="characterHalf">
                 <img class="character" id="charP1"/>
             </div>
         </div>
 
         <div class="absol">
-            <div id="charaP2">
+            <div id="charaP2" class="characterHalf">
                 <img class="character" id="charP2"/>
             </div>
         </div>
